@@ -1,5 +1,4 @@
 var jwt = require('../jwt');
-
 const resMessage = require('./responseMessage');
 const statusCode = require('./statusCode');
 const util = require('./utils');
