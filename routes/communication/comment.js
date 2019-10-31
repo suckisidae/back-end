@@ -13,4 +13,17 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'comment' });
 });
 
+router.post('/', async (req, res) => {
+  const postMyCommentQuery = "INSERT INTO comment (item_idx, write_idx, text, date) VALUES  (?,?,?,?)";
+  const postMyCommentResult = await db.queryParam_Arr(postMyCommentQuery, [1,2,"감사합니다",1]);
+
+  //예외 처리
+  if(!postMyCommentResult){
+    res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.BAD_REQUEST));
+  }else{
+    res.status(200).send(utils.successTrue(statusCode.OK , "성공했어요.", postMyCommentResult))
+  }
+
+});
+
 module.exports = router;

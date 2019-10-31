@@ -9,7 +9,10 @@ module.exports = {
     EMPTY_REFRESH_TOKEN: "재발급 토큰이 존재하지 않습니다.",
     CREATE_TOKEN: "토큰 발급 완료.",
     REFRESH_TOKEN: "토큰 재발급 완료.",
-
+    
     NO_SELECT_AUTHORITY: "조회 권한 없음.",
-    USER_SELECTED: "회원 조회 성공."
+    USER_SELECTED: "회원 조회 성공.",
+    POST_BAD_RESULT: "아이템 등록 실패.",
+    SUCCESS_POST_ITEM:"아이템 등록 성공",
+    GET_BAD_RESULT:"아이템 불러오기 실패"
 };
