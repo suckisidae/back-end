@@ -8,9 +8,10 @@ const authUtils = require('../../module/utils/authUtils');
 const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'comment' });
-});
+router.get('/', async(req,res) => {
+    const getCategoryNameQuery = "SELECT category_name FROM category WHERE category_idx = 1";
+    const getCategoryNameResult = await db.queryParam_None(getCategoryNameQuery);
+  })
+
 
 module.exports = router;
