@@ -17,5 +17,14 @@ module.exports = {
     SUCCESS_POST_ITEM: "아이템 등록 성공",
 
     GET_BAD_RESULT: "아이템 조회 실패",
-    SUCCESS_GET_ITEM: "아이템 조회 성공"
+    SUCCESS_GET_ITEM: "아이템 조회 성공",
+
+    COMMENT_POST_BAD_RESULT: "댓글 등록 실패",
+    COMMENT_POST_SUCCESS: "댓글 등록 성공",
+
+    COMMENT_GET_BAD_RESULT: "댓글 조회 실패",
+    COMMENT_GET_SUCCESS:"댓글 조회 성공",
+
+    COMMENT_UPDATE_BAD_RESULT: "댓글 수정 실패",
+    COMMENT_UPDATE_SUCCESS: "댓글 수정 성공"
 };
