@@ -9,8 +9,12 @@ const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: '회원가입' });
-});
+router.post('/', async(req,res) => {
+    const {id, nickname, password, intro, pw_ask, pw_answer, photo} = req.body;
+
+    if(!id || !nickname || !password || !intro || !pw_answer || !photo ){
+        
+    }
+})
 
 module.exports = router;
