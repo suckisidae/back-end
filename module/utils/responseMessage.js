@@ -13,6 +13,7 @@ module.exports = {
     NO_SELECT_AUTHORITY: "조회 권한 없음.",
     USER_SELECTED: "회원 조회 성공.",
 
+
     POST_BAD_RESULT: "아이템 등록 실패",
     SUCCESS_POST_ITEM: "아이템 등록 성공",
 
