@@ -9,41 +9,52 @@ const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 const moment = require('moment');
 
-/* GET home page. */
-// router.get('/', function(req, res, next) {
-//   res.render('index', { title: 'comment' });
-// });
+//댓글 등록
+router.post('/', async(req,res)=>{
 
-router.get('/', async(req,res) => {
-  const getCategoryNameQuery = "SELECT category_name FROM category WHERE category_idx = 1";
-  const getCategoryNameResult = await db.queryParam_None(getCategoryNameQuery);
+	const date = moment().format("YYYY-MM-DD HH:mm:ss");
+	const {item_idx, writer_idx, text} = req.body;
 
-  console.log(getCategoryNameResult);
-})
-router.post('/', async(req,res) => {
-  const postMyCommentQuery = "INSERT INTO comment (item_idx, writer_idx, text, date) VALUES (?, ?, ?, ?)";
-  const postMyCommentResult = await db.queryParam_Arr(postMyCommentQuery, [1, 2, '감사합니다', moment().format('YYYY-MM-DD HH:mm:ss')]);
+	const insertCommentQuery = "INSERT INTO comment (item_idx, writer_idx, text, date) VALUES (?, ?, ?, ?)";
+	const insertCommentResult = await db.queryParam_Arr(insertCommentQuery, [item_idx, writer_idx, text, date]);
 
-  if(!postMyCommentResult){
-    res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.BAD_REQUEST));
-  } else {
-    res.status(200).send(utils.successTrue(statusCode.OK, "성공했어요", postMyCommentResult));
-  }
+	if(!insertCommentResult){
+		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.COMMENT_POST_BAD_RESULT));
+	}else{
+		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.COMMENT_POST_SUCCESS, insertCommentResult));
+	}
+
 });
-// router.put('/', upload.single('img'), authUtil.isLoggedin, async (req, res) => {
-// 	let img = req.file.location;
-// 	const intro = req.body.intro;
-// 	const name = req.body.name;
-// 	if (!img  || !name) {
-// 		res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NO_USER_DATA));
-// 	} else {
-// 		const updateUserInfoQuery = "UPDATE user SET user_img = ?, user_intro = ?, user_name = ? WHERE user_idx = ?";
-// 		const updateUserInfoResult = await db.queryParam_Arr(updateUserInfoQuery, [img, intro, name, req.decoded.idx]);
-// 		if (!updateUserInfoResult) {
-// 			res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.UPDATE_USER_DATA_FAIL));
-// 		} else {
-// 			res.status(200).send(utils.successTrue(statusCode.OK, resMessage.UPDATE_USER_DATA_SUCCESS,updateUserInfoResult));
-// 		}
-// 	}
-// });
+
+//해당 게시글 댓글 조회
+router.get('/:item_idx', async(req, res)=>{
+    const itemIdx = req.params.item_idx;
+	
+	const getAllCommentQuery = "SELECT * FROM comment WHERE item_idx = ?";
+	const getAllCommentResult = await db.queryParam_Arr(getAllCommentQuery, [itemIdx]);
+
+	if(!getAllCommentQuery){
+		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.COMMENT_GET_BAD_RESULT));
+	}else{
+		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.COMMENT_GET_SUCCESS, getAllCommentResult));
+	}
+});
+
+//댓글 수정
+router.put('/:comment_idx', async(req, res)=>{ //처음에는 해당 게시글idx를 받아오려했는데 댓글 idx를 받아오는게 더 깔끔할것같아서 comment_idx로 했슴다
+	const comment_idx = req.params.comment_idx;
+	const date = moment().format("YYYY-MM-DD HH:mm:ss");
+	const {text} = req.body;
+
+	const updateCommentQuery = "UPDATE comment SET text=?, date=? WHERE comment_idx = ?"; //시간, 텍스트만 수정  작성자 수정x
+	const updateCommentResult = await db.queryParam_Arr(updateCommentQuery, [text, date, comment_idx]);
+
+	if(!updateCommentResult){
+		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.COMMENT_UPDATE_BAD_RESULT));
+	}else{
+		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.COMMENT_UPDATE_SUCCESS, updateCommentResult));
+	}
+});
+
+
 module.exports = router;
