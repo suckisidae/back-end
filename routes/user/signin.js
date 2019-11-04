@@ -7,10 +7,32 @@ const db = require('../../module/pool');
 const authUtils = require('../../module/utils/authUtils');
 const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
+const encryption = require('../../module/encryption')
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: '로그인' });
-});
+router.post('/', async (req, res) => {
+	const {id, password} = req.body;
+
+	if (!id || !password){
+		res.statusCode(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
+		return;
+	}
+	const getUserPasswordQuery = `SELECT user_idx, password, salt FROM user WHERE id = '${id}'`
+	const getUserPasswordResult = await db.queryParam_None(getUserPasswordQuery)
+
+	if(!getUserPasswordResult){
+		res.statusCode(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NOT_FIND_USER));
+		return;
+	}
+	const passwordHashed = await encryption.encryptWithSalt(password, getUserPasswordResult[0].salt);
+	
+	if(getUserPasswordResult[0].password == passwordHashed.hashed){
+		const getToken = jwt.sign(getUserPasswordResult[0].user_idx);
+		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.LOGIN_SUCCESS, getToken));
+		return;
+	} else {
+		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.LOGIN_FAIL));
+	}
+
+})
 
 module.exports = router;

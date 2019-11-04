@@ -5,8 +5,8 @@ module.exports = {
     sign: function (user) {
         const options = {
             algorithm: 'HS256',
-            expiresIn: "5h",
-            issuer: "junjnami"
+            expiresIn: "7 days",
+            issuer: "seokki"
         };
         const payload = {
             idx: user.idx,
