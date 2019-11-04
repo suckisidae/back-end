@@ -7,10 +7,24 @@ const db = require('../../module/pool');
 const authUtils = require('../../module/utils/authUtils');
 const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
+const encryption = require('../../module/encryption');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: '회원가입' });
-});
+router.post('/', async(req,res) => {
+    const {id, nickname, password, intro, pw_ask, pw_answer, photo} = req.body;
+
+    if(!id || !nickname || !password || !intro || !pw_answer || !photo ){
+        res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, `${resMessage.NULL_VALUE},${missParameters}`));
+        return;
+    }
+    const encryptionResult = await encryption.encrypt(password);
+    const insertUserQuery = 'INSERT INTO user (id, nickname, password, intro, pw_ask, pw_answer, photo, salt) VALUES (?,?,?,?,?,?,?,?)';
+    const insertUserResult = db.queryParam_Parse(insertUserQuery, [id, nickname, encryptionResult.hashed, intro, pw_ask, pw_answer, photo, encryptionResult.salt]);
+    if(!insertUserResult){
+        res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.SIGNIN_FAIL));
+    } else {
+        res.status(200).send(utils.successTrue(statusCode.CREATED, resMessage.SIGNIN_SUCCESS, id))
+    }
+})
 
 module.exports = router;

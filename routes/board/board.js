@@ -15,7 +15,8 @@ router.get('/', async(req,res) => {
     const item_idx = 3
     const getItemQuery = "SELECT category_idx FROM item WHERE item_idx = 3";
     const getCateItemQuery = "SELECT category_name FROM category WHERE category_idx = ?";
-    const getItemResult = await db.queryParam_Arr(getItemQuery)
+    const getItemResult = await db.queryParam_Parse(getItemQuery)
+    console.log(getItemResult)
     const cateIdx = getItemResult[0].category_idx
     console.log(cateIdx)
     const getCateItemResult = await db.queryParam_Parse(getCateItemQuery,[cateIdx])
@@ -32,7 +33,7 @@ router.get('/:item_idx', async(req, res) => {
     const itemIdx = req.params.item_idx
     
     const getAllItemInfoQuery = "SELECT * FROM item WHERE item_idx = ?"
-    const getAllItemInfoResult = await db.queryParam_Arr(getAllItemInfoQuery, [itemIdx])
+    const getAllItemInfoResult = await db.queryParam_Parse(getAllItemInfoQuery, [itemIdx])
 
     res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_POST_ITEM, getAllItemInfoResult))
 })
@@ -45,7 +46,7 @@ router.post('/', async(req, res) => {
     const {writer_idx, thumbnail, hashtag, text, category_idx, title} = req.body;
 
     const insertItemQuery = "INSERT INTO item (writer_idx, date, thumbnail, hashtag, text, category_idx, title) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    const insertItemResult = await db.queryParam_Arr(insertItemQuery, [writer_idx, date, thumbnail, hashtag, text, category_idx, title]);
+    const insertItemResult = await db.queryParam_Parse(insertItemQuery, [writer_idx, date, thumbnail, hashtag, text, category_idx, title]);
 
     if(!insertItemResult){
         res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.POST_BAD_RESULT))

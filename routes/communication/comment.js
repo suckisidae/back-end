@@ -16,7 +16,7 @@ router.post('/', async(req,res)=>{
 	const {item_idx, writer_idx, text} = req.body;
 
 	const insertCommentQuery = "INSERT INTO comment (item_idx, writer_idx, text, date) VALUES (?, ?, ?, ?)";
-	const insertCommentResult = await db.queryParam_Arr(insertCommentQuery, [item_idx, writer_idx, text, date]);
+	const insertCommentResult = await db.queryParam_Parse(insertCommentQuery, [item_idx, writer_idx, text, date]);
 
 	if(!insertCommentResult){
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.COMMENT_POST_BAD_RESULT));
@@ -31,7 +31,7 @@ router.get('/:item_idx', async(req, res)=>{
     const itemIdx = req.params.item_idx;
 	
 	const getAllCommentQuery = "SELECT * FROM comment WHERE item_idx = ?";
-	const getAllCommentResult = await db.queryParam_Arr(getAllCommentQuery, [itemIdx]);
+	const getAllCommentResult = await db.queryParam_Parse(getAllCommentQuery, [itemIdx]);
 
 	if(!getAllCommentQuery){
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.COMMENT_GET_BAD_RESULT));
@@ -47,7 +47,7 @@ router.put('/:comment_idx', async(req, res)=>{ //처음에는 해당 게시글id
 	const {text} = req.body;
 
 	const updateCommentQuery = "UPDATE comment SET text=?, date=? WHERE comment_idx = ?"; //시간, 텍스트만 수정  작성자 수정x
-	const updateCommentResult = await db.queryParam_Arr(updateCommentQuery, [text, date, comment_idx]);
+	const updateCommentResult = await db.queryParam_Parse(updateCommentQuery, [text, date, comment_idx]);
 
 	if(!updateCommentResult){
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.COMMENT_UPDATE_BAD_RESULT));

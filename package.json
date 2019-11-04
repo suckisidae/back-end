@@ -18,7 +18,8 @@
     "multer": "^1.4.2",
     "multer-s3": "^2.9.0",
     "nodemon": "^1.19.4",
+    "pbkdf2": "^3.0.17",
     "pm2": "^3.5.1",
-    "promise-mysql": "^3.3.2"
+    "promise-mysql": "^4.1.1"
   }
 }
