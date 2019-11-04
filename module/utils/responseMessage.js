@@ -4,6 +4,7 @@ module.exports = {
     LOGIN_SUCCESS: "로그인 성공",
     SIGNIN_FAIL: "회원가입 실패",
     SIGNIN_SUCCESS: "회원가입 성공",
+    NOT_FIND_USER: "회원을 찾을 수 없음",
 
     INVALID_TOKEN: "잘못된 형식의 토큰입니다.",
     EMPTY_TOKEN: "토큰값이 존재하지 않습니다.",

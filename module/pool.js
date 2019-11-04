@@ -18,7 +18,7 @@ module.exports = {
         return result;
     },
     queryParam_Arr: async (...args) => {
-        this.queryParam_Parse(args[0], args[1]);
+        return this.queryParam_Parse(args[0], args[1]);
     },
     queryParam_Parse: async (query, value) => {
         let result = null;
