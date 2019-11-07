@@ -69,5 +69,20 @@ router.put('/:comment_idx', async(req, res)=>{ //처음에는 해당 게시글id
 	}
 });
 
+//댓글 삭제
+router.delete('/:comment_idx', async(req, res) =>{ //comment_idx를 받아온다.
+
+	const comment_idx = req.params.comment_idx;
+    
+    const commentDeleteQuery = "Delete FROM comment WHERE comment_idx = ?"
+    const commentDeleteResult = await db.queryParam_Parse(commentDeleteQuery, [comment_idx])
+
+    if(!commentDeleteResult){
+        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.COMMENT_DELETE_BAD_RESULT));
+    }else{
+        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.COMMENT_DELETE_SUCCESS, commentDeleteResult));
+    }
+});
+
 
 module.exports = router;

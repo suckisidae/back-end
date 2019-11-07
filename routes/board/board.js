@@ -17,9 +17,9 @@ router.get('/', async(req,res) =>{
     const getItemResult = await db.queryParam_Parse(getItemQuery,) 
 
     if(!getItemResult){
-        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.GET_BAD_RESULT));
+        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ITEM_GET_BAD_RESULT));
     }else{
-        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_GET_ITEM, getCateItemResult));
+        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ITEM_GET_SUCCESS, getCateItemResult));
     }
 });
 
@@ -30,9 +30,9 @@ router.get('/:item_idx', async(req, res)=>{
     const getAllItemInfoResult = await db.queryParam_Parse(getAllItemInfoQuery, [itemIdx])
 
     if(!getAllItemInfoResult){
-        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.GET_BAD_RESULT));
+        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ITEM_GET_SUCCESS));
     }else{
-        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_GET_ITEM, getCateItemResult));
+        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ITEM_GET_SUCCESS, getCateItemResult));
     }
 });
 
@@ -52,9 +52,9 @@ router.post('/', async(req, res) =>{
     const insertItemResult = await db.queryParam_Parse(insertItemQuery, [writer_idx, date , thumbnail, hashtag, text, category_idx, title]);
 
     if(!insertItemResult){
-        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.POST_BAD_RESULT));
+        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ITEM_POST_BAD_RESULT));
     }else{
-        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_POST_ITEM, insertItemResult));
+        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ITEM_POST_SUCCESS, insertItemResult));
     }
 });
 
@@ -75,9 +75,9 @@ router.put('/:item_idx', async(req, res) =>{
     const itemUpdateResult = await db.queryParam_Parse(itemUpdateQuery, [date , thumbnail, hashtag, text, category_idx, title, itemIdx]);
 
     if(!itemUpdateResult){
-        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.PUT_BAD_RESULT));
+        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ITEM_PUT_BAD_RESULT));
     }else{
-        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_PUT_ITEM, ItemUpdateResult));
+        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ITEM_PUT_SUCCESS, ItemUpdateResult));
     }
 });
 
@@ -89,11 +89,12 @@ router.delete('/:item_idx', async(req, res) =>{
     const itemDeleteResult = await db.queryParam_Parse(itemDeleteQuery, [itemIdx])
 
     if(!itemDeleteResult){
-        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.DELETE_BAD_RESULT));
+        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ITEM_DELETE_BAD_RESULT));
     }else{
-        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_DELETE_ITEM, ItemDeleteResult));
+        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ITEM_DELETE_SUCCESS, ItemDeleteResult));
     }
 });
+
 
 
 module.exports = router;
