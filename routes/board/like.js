@@ -52,7 +52,7 @@ router.post('/:item_idx', async(req,res) =>{
 	  const delHeartResult = await db.queryParam_Parse(delHeartQuery, [userIdx, itemIdx]);
   }else{
 	  //상품을 찜 하지 않았을 경우 등록합니다.
-	  const addHeartQuery = "INSERT INTO heart (user_idx, item_idx) VALUES (?,?)"
+	  const addHeartQuery = "INSERT INTO heart (user_idx, item_idx) VALUES (?,?)" 
 	  const addHeartResult = await db.queryParam_Parse(addHeartQuery, [userIdx, itemIdx]);
   }
   
