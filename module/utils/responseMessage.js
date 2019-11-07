@@ -46,6 +46,10 @@ module.exports = {
 
     SEARCH_TITLE_BAD_RESULT: "제목 검색 실패",
     SEARCH_TITLE_SUCCESS: "제목 검색 성공",
+    SEARCH_HASHTAG_SUCCESS: "해쉬태그 검색 성공",
+    SEARCH_HASHTAG_FAIL: "해쉬태그 검색 실패",
+    SEARCH_TEXT_SUCCESS: "내용기반 검색 성공",
+    SEARCH_TEXT_FAIL: "내용기반 검색 실패",
 
     FIND_PW_BAD_RESULT: "비밀번호 찾기 실패",
     FIND_PW_SUCCESS: "비밀번호 찾기 성공",
@@ -54,5 +58,8 @@ module.exports = {
     UPDATE_PW_SUCCESS: "비밀번호 수정 성공",
 
     PW_UPDATE_BAD_RESULT: "비밀번호 재설정 실패",
-    PW_UPDATE_SUCCESS: "비밀번호 재설정 성공"
+    PW_UPDATE_SUCCESS: "비밀번호 재설정 성공",
+
+    UPDATE_USER_INFO_SUCCESS: "마이페이지 수정 성공",
+    UPDATE_USER_INFO_FAIL: "마이페이지 수정 실패"
 };
