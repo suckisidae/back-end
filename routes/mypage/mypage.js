@@ -12,6 +12,14 @@ const jwt = require('../../module/jwt');
 router.get('/', authUtils.isLoggedin, async(req, res) => {
     const userIdx = req.decoded.idx;
     
+    const userAllInfoQuery = `SELECT nickname, intro, photo, star FROM user WHERE user_idx = ${userIdx}`;
+    const userAllInfoResult = await db.queryParam_Parse(userAllInfoQuery);
+
+    if(!userAllInfoResult[0]){
+        res.status(400).send(utils.successFalse(statusCode.NO_CONTENT, resMessage.NOT_FIND_USER));
+    } else {
+        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.USER_SELECTED, userAllInfoResult));
+    }
 });
 
 // 마이페이지 수정
