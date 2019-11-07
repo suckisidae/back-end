@@ -54,5 +54,8 @@ module.exports = {
     UPDATE_PW_SUCCESS: "비밀번호 수정 성공",
 
     PW_UPDATE_BAD_RESULT: "비밀번호 재설정 실패",
-    PW_UPDATE_SUCCESS: "비밀번호 재설정 성공"
+    PW_UPDATE_SUCCESS: "비밀번호 재설정 성공",
+
+    UPDATE_USER_INFO_SUCCESS: "마이페이지 수정 성공",
+    UPDATE_USER_INFO_FAIL: "마이페이지 수정 실패"
 };
