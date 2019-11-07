@@ -14,3 +14,9 @@ router.get('/', function(req, res, next) {
 });
 
 module.exports = router;
+
+/*
+찜 목록 불러오기
+찜 등록하기!
+찜 취소하기!
+*/

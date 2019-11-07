@@ -15,18 +15,18 @@ module.exports = {
     
     NO_SELECT_AUTHORITY: "조회 권한 없음.",
     USER_SELECTED: "회원 조회 성공.",
-<<<<<<< HEAD
-    POST_BAD_RESULT: "아이템 등록 실패.",
-    SUCCESS_POST_ITEM:"아이템 등록 성공",
-    GET_BAD_RESULT:"아이템 불러오기 실패"
-=======
-
 
     POST_BAD_RESULT: "아이템 등록 실패",
     SUCCESS_POST_ITEM: "아이템 등록 성공",
 
+    PUT_BAD_RESULT: "아이템 수정 실패",
+    SUCCESS_PUT_ITEM: "아이템 수정 성공",
+
     GET_BAD_RESULT: "아이템 조회 실패",
     SUCCESS_GET_ITEM: "아이템 조회 성공",
+
+    DELETE_BAD_RESULT: "아이템 삭제 실패",
+    SUCCESS_DELETE_ITEM: "아이템 삭제 성공",
 
     COMMENT_POST_BAD_RESULT: "댓글 등록 실패",
     COMMENT_POST_SUCCESS: "댓글 등록 성공",
@@ -36,5 +36,4 @@ module.exports = {
 
     COMMENT_UPDATE_BAD_RESULT: "댓글 수정 실패",
     COMMENT_UPDATE_SUCCESS: "댓글 수정 성공"
->>>>>>> 5533aefd0cef8a62aea3a5b54bc3ac32c3ad4da1
 };
