@@ -8,9 +8,11 @@ const authUtils = require('../../module/utils/authUtils');
 const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: '거래요청받은 상품 조회' });
+// 내가 요청받은 상품 조회
+router.get('/', authUtils.isLoggedin, async(req, res) => {
+    const userIdx = req.decoded;
+
+    res.render('index', { title: '마이페이지 조회' });
 });
 
 module.exports = router;
