@@ -9,12 +9,11 @@ const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 const encryption = require('../../module/encryption');
 
-/* GET home page. */
-router.post('/', async(req,res) => {
-    const {id, nickname, password, intro, pw_ask, pw_answer, photo} = req.body;
-
-    if(!id || !nickname || !password || !intro || !pw_answer || !photo ){
-        res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, `${resMessage.NULL_VALUE},${missParameters}`));
+router.post('/', upload.single('photo'), async(req,res) => {
+    const {id, nickname, password, intro, pw_ask, pw_answer} = req.body;
+    const photo = req.file.location
+    if(!id || !nickname || !password || !intro || !pw_answer || !pw_ask){
+        res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
         return;
     }
     const encryptionResult = await encryption.encrypt(password);
