@@ -9,6 +9,7 @@ const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 const encryption = require('../../module/encryption');
 
+
 router.post('/', upload.single('photo'), async(req,res) => {
     const {id, nickname, password, intro, pw_ask, pw_answer} = req.body;
     const photo = req.file.location

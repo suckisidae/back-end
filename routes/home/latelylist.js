@@ -9,8 +9,41 @@ const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
 /* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: '최신상품' });
+
+
+router.get('/', async(req, res)=>{
+	//식료품
+	const getRecentFoodQuery = "SELECT * FROM item WHERE category_idx = ? ORDER BY date DESC LIMIT 6";
+	const getRecentFoodResult = await db.queryParam_Parse(getRecentFoodQuery,[1]);
+	//it가전기기
+	const getRecentITQuery = "SELECT * FROM item WHERE category_idx = ? ORDER BY date DESC LIMIT 6";
+	const getRecentITResult = await db.queryParam_Parse(getRecentITQuery,[2]);
+	//옷
+	const getRecentClothesQuery = "SELECT * FROM item WHERE category_idx = ? ORDER BY date DESC LIMIT 6";
+	const getRecentClothesResult = await db.queryParam_Parse(getRecentClothesQuery,[3]);
+	//서적
+	const getRecentBookQuery = "SELECT * FROM item WHERE category_idx = ? ORDER BY date DESC LIMIT 6";
+	const getRecentBookResult = await db.queryParam_Parse(getRecentBookQuery,[4]);
+
+	//총 집합
+
+	//임시
+	let temp = [];
+	temp.push(getRecentFoodResult);
+	temp.push(getRecentITResult);
+	temp.push(getRecentClothesResult);
+	temp.push(getRecentBookResult);
+	//찐
+	const getAllRecentResult = temp;
+	
+	if(!getAllRecentResult){
+		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.RECENT_ITEM_GET_BAD_RESULT));
+	}else{
+		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.RECENT_ITEM_GET_SUCCESS, getAllRecentResult));
+	}
+
+	
+
 });
 
 module.exports = router;
