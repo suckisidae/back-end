@@ -9,9 +9,7 @@ module.exports = {
             issuer: "seokki"
         };
         const payload = {
-            idx: user.idx,
-            id: user.id,
-            grade : user.grade
+            idx: user
         };
         let token = jwt.sign(payload, secretOrPrivateKey, options);
         return token;

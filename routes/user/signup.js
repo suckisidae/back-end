@@ -19,7 +19,7 @@ router.post('/', upload.single('photo'), async(req,res) => {
     }
     const encryptionResult = await encryption.encrypt(password);
     const insertUserQuery = 'INSERT INTO user (id, nickname, password, intro, pw_ask, pw_answer, photo, salt) VALUES (?,?,?,?,?,?,?,?)';
-    const insertUserResult = db.queryParam_Parse(insertUserQuery, [id, nickname, encryptionResult.hashed, intro, pw_ask, pw_answer, photo, encryptionResult.salt]);
+    const insertUserResult = await db.queryParam_Parse(insertUserQuery, [id, nickname, encryptionResult.hashed, intro, pw_ask, pw_answer, photo, encryptionResult.salt]);
     if(!insertUserResult){
         res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.SIGNIN_FAIL));
     } else {

@@ -5,6 +5,10 @@ module.exports = {
     SIGNIN_FAIL: "회원가입 실패",
     SIGNIN_SUCCESS: "회원가입 성공",
     NOT_FIND_USER: "회원을 찾을 수 없음",
+    ALREADY_ID: "ID중복",
+    ABLE_ID: "사용가능한 ID",
+    ALREADY_NICKNAME: "닉네임 중복",
+    ABLE_NICKNAME: "사용가능한 닉네임",
 
     INVALID_TOKEN: "잘못된 형식의 토큰입니다.",
     EMPTY_TOKEN: "토큰값이 존재하지 않습니다.",
