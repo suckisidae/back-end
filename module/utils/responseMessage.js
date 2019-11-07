@@ -30,5 +30,11 @@ module.exports = {
     COMMENT_GET_SUCCESS:"댓글 조회 성공",
 
     COMMENT_UPDATE_BAD_RESULT: "댓글 수정 실패",
-    COMMENT_UPDATE_SUCCESS: "댓글 수정 성공"
+    COMMENT_UPDATE_SUCCESS: "댓글 수정 성공",
+
+    RECENT_ITEM_GET_BAD_RESULT: "최근 물품 읽기 실패",
+    RECENT_ITEM_GET_SUCCESS: "최근 물품 읽기 성공",
+
+    SEARCH_TITLE_BAD_RESULT: "제목 검색 실패",
+    SEARCH_TITLE_SUCCESS: "제목 검색 성공"
 };

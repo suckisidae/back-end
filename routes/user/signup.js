@@ -13,7 +13,7 @@ const encryption = require('../../module/encryption');
 router.post('/', async(req,res) => {
     const {id, nickname, password, intro, pw_ask, pw_answer, photo} = req.body;
 
-    if(!id || !nickname || !password || !intro || !pw_answer || !photo ){
+    if(!id || !nickname || !password || !intro || !pw_answer ){
         res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, `${resMessage.NULL_VALUE},${missParameters}`));
         return;
     }
