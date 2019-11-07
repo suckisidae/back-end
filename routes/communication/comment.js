@@ -14,9 +14,16 @@ router.post('/', async(req,res)=>{
 
 	const date = moment().format("YYYY-MM-DD HH:mm:ss");
 	const {item_idx, writer_idx, text} = req.body;
+	
+	if(!item_idx | !writer_idx | !text){
+		res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
+        return;
+	}
 
 	const insertCommentQuery = "INSERT INTO comment (item_idx, writer_idx, text, date) VALUES (?, ?, ?, ?)";
 	const insertCommentResult = await db.queryParam_Parse(insertCommentQuery, [item_idx, writer_idx, text, date]);
+
+	
 
 	if(!insertCommentResult){
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.COMMENT_POST_BAD_RESULT));
@@ -45,6 +52,12 @@ router.put('/:comment_idx', async(req, res)=>{ //처음에는 해당 게시글id
 	const comment_idx = req.params.comment_idx;
 	const date = moment().format("YYYY-MM-DD HH:mm:ss");
 	const {text} = req.body;
+
+	//댓글이 비어있는 경우
+	if(!comment_idx | !date | !text){
+		res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
+        return;
+	}
 
 	const updateCommentQuery = "UPDATE comment SET text=?, date=? WHERE comment_idx = ?"; //시간, 텍스트만 수정  작성자 수정x
 	const updateCommentResult = await db.queryParam_Parse(updateCommentQuery, [text, date, comment_idx]);
