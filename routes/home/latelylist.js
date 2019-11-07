@@ -29,7 +29,7 @@ router.get('/', async(req, res)=>{
 
 	//임시
 	let temp = [];
-	temp.push(getRecentFoodResult);	
+	temp.push(getRecentFoodResult);
 	temp.push(getRecentITResult);
 	temp.push(getRecentClothesResult);
 	temp.push(getRecentBookResult);
