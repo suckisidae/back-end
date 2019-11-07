@@ -10,8 +10,8 @@ const jwt = require('../../module/jwt');
 
 // 마이페이지 조회
 router.get('/', authUtils.isLoggedin, async(req, res) => {
-    const userIdx = req.decoded.idx
-    console.log(userIdx)
+    const userIdx = req.decoded.idx;
+    
 });
 
 // 마이페이지 수정
