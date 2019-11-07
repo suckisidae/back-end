@@ -24,7 +24,8 @@ router.get('/', authUtils.isLoggedin, async(req, res) => {
 
 // 마이페이지 수정
 router.put('/', authUtils.isLoggedin, async(req, res) => {
-    res.render('index', { title: '마이페이지 조회' });
+    const {nickname, intro, photo} = req.body;
+    const userIdx = req.decoded.idx;
 });
 
 module.exports = router;
