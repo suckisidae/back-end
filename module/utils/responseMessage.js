@@ -72,12 +72,17 @@ module.exports = {
     TALK_LIST_GET_BAD_RESULT: "메세지 목록 조회 실패",
     TALK_LIST_GET_SUCCESS: "메세지 목록 조회 성공",
 
+    NO_TALK_LIST: "대화 목록 없음",
+
     UPDATE_USER_INFO_SUCCESS: "마이페이지 수정 성공",
     UPDATE_USER_INFO_FAIL: "마이페이지 수정 실패",
 
     ADD_LIKED_ITEM:"상품 찜 등록 성공",
     DEL_LIKED_ITEM:"상품 찜 삭제 성공",
     BAD_LIKED_ITEM:"상품 상호작용 실패",
+
+    ASKED_ITEM_GET_BAD_RESULT:"거래 요청받은 물품 조회 실패",
+    ASKED_ITEM_GET_SUCCESS:"거래 요청받은 물품 조회 성공",
 
     SUCCESS_GET_CATEGORY:"카테고리 조회 성공",
     GET_BAD_CATEGORY:"카테고리 조회 실패"
