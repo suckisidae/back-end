@@ -57,5 +57,15 @@ module.exports = {
     UPDATE_PW_SUCCESS: "비밀번호 수정 성공",
 
     PW_UPDATE_BAD_RESULT: "비밀번호 재설정 실패",
-    PW_UPDATE_SUCCESS: "비밀번호 재설정 성공"
+    PW_UPDATE_SUCCESS: "비밀번호 재설정 성공",
+
+    TALK_POST_BAD_RESULT: "메세지 보내기 실패",
+    TALK_POST_SUCCESS: "메세지 보내기 성공",
+
+    TALK_GET_BAD_RESULT: "메세지 조회 실패",
+    TALK_GET_SUCCESS: "메세지 조회 성공",
+
+    TALK_LIST_GET_BAD_RESULT: "메세지 목록 조회 실패",
+    TALK_LIST_GET_SUCCESS: "메세지 목록 조회 성공"
+
 };
