@@ -48,7 +48,7 @@ jspm_packages/
 config/
 
 # goorm data
-.goorm.manifest
+goorm.manifest
 
 # TypeScript v1 declaration files
 typings/
