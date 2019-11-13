@@ -8,7 +8,7 @@ const authUtils = require('../../module/utils/authUtils');
 const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
-// 내가 요청받은 상품 조회
+// 내가 요청한 상품 조회
 router.get('/', authUtils.isLoggedin, async(req, res) => {
     const userIdx = req.decoded;
 
