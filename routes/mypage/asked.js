@@ -8,6 +8,11 @@ const authUtils = require('../../module/utils/authUtils');
 const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
+<<<<<<< HEAD
+// 내가 요청한 상품 조회
+router.get('/', authUtils.isLoggedin, async(req, res) => {
+    const userIdx = req.decoded;
+=======
 // 내가 요청받은 상품 조회
 router.get('/', async(req, res)=>{
     
@@ -16,6 +21,7 @@ router.get('/', async(req, res)=>{
     //내가 거래를 요청받은 상품들의 목록(나에게 거래를 요청한 모든 물품들.)
 	const getAskedItemQuery = "SELECT  FROM trade JOIN item ON item.item_idx = trade.to_item_idx WHERE writer_idx = ?";
 	const getAskedItemResult = await db.queryParam_Parse(getAskedItemQuery, [user_idx]);
+>>>>>>> 522e57530118fddb2443050e932356700afd3225
 
     if(!getAskedItemResult){
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ASKED_ITEM_GET_BAD_RESULT));

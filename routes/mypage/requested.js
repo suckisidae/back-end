@@ -8,11 +8,19 @@ const authUtils = require('../../module/utils/authUtils');
 const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
-// 거래 요청한 상품 조회
+// 거래 요청받은 상품 조회
+// 대기:0 거절:1 수락:2
 router.get('/', authUtils.isLoggedin, async(req, res) => {
-  const userIdx = req.decoded;
+  const userIdx = req.decoded.idx;
+  
+  const getMyProductQuery = `SELECT thumbnail, title, date FROM item WHERE writer_idx = '${userIdx}' ORDER BY date DESC`;
+  const getMyProductResult = await db.queryParam_Parse(getMyProductQuery);
 
-  res.render('index', { title: '마이페이지 조회' });
+  if(!getMyProductResult){
+      res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST,resMessage.GET_MY_PRODUCT_FAIL))
+  } else {
+      res.status(200).send(utils.successTrue(statusCode.OK, resMessage.GET_MY_PRODUCT_SUCCESS, getMyProductResult));
+  }
 });
 
 module.exports = router;

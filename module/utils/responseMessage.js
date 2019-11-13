@@ -81,10 +81,20 @@ module.exports = {
     DEL_LIKED_ITEM:"상품 찜 삭제 성공",
     BAD_LIKED_ITEM:"상품 상호작용 실패",
 
+<<<<<<< HEAD
+    GET_MY_PRODUCT_FAIL:"내 상품조회 실패",
+    GET_MY_PRODUCT_SUCCESS: "내 상품조회 성공",
+=======
     ASKED_ITEM_GET_BAD_RESULT:"거래 요청받은 물품 조회 실패",
     ASKED_ITEM_GET_SUCCESS:"거래 요청받은 물품 조회 성공",
 
     SUCCESS_GET_CATEGORY:"카테고리 조회 성공",
     GET_BAD_CATEGORY:"카테고리 조회 실패"
+>>>>>>> 522e57530118fddb2443050e932356700afd3225
 
+    ASK_EXCHANGE_SUCCESS: "거래요청 성공",
+    ASK_EXCHANGE_FAIL: "거래요청 실패",
+    OVER_THREE_PRODUCT: "내 물건이 3개 초과입니다",
+    DELETE_EXCHANGE_FAIL: "거래 삭제 실패",
+    DELETE_EXCHANGE_SUCCESS: "거래 삭제 성공"
 };
