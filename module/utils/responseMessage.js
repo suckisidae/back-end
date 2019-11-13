@@ -62,9 +62,11 @@ module.exports = {
 
     UPDATE_USER_INFO_SUCCESS: "마이페이지 수정 성공",
     UPDATE_USER_INFO_FAIL: "마이페이지 수정 실패",
-  
+
     ADD_LIKED_ITEM:"상품 찜 등록 성공",
     DEL_LIKED_ITEM:"상품 찜 삭제 성공",
-    BAD_LIKED_ITEM:"상품 상호작용 실패"
+    BAD_LIKED_ITEM:"상품 상호작용 실패",
 
+    GET_MY_PRODUCT_FAIL:"내 상품조회 실패",
+    GET_MY_PRODUCT_SUCCESS: "내 상품조회 성공"
 };
