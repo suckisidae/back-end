@@ -29,7 +29,7 @@ router.get('/:user_idx', async(req,res) =>{
   if(!getLikeResult){
       res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.GET_BAD_RESULT));
   }else{
-      res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_GET_ITEM, getLikeItemRegUserResult));
+      res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_GET_ITEM, getLikeResult));
   }
 });
 
@@ -39,28 +39,25 @@ router.get('/:user_idx', async(req,res) =>{
 */
 router.post('/:item_idx', async(req,res) =>{
 
-  const itemIdx = req.params.item_idx;
-  const userIdx = 2;
+	const itemIdx = req.params.item_idx;
+	const userIdx = 2;
 
-  //user가 상품을 찜했는지 확인합니다.
-  const isHeartQuery = "SELECT EXISTS (SELECT * FROM heart WHERE user_idx = ? AND item_idx = ?) as SUCCESS"
-  const isHeartResult = await db.queryParam_Parse(isHeartQuery, [userIdx, itemIdx]);
+	//user가 상품을 찜했는지 확인합니다.
+	const isHeartQuery = "SELECT EXISTS (SELECT * FROM heart WHERE user_idx = ? AND item_idx = ?) as SUCCESS"
+	const isHeartResult = await db.queryParam_Parse(isHeartQuery, [userIdx, itemIdx]);
 
-  if(isHeartResult[0]["SUCCESS"] == 1){
-	  //상품을 찜 해놓았을 경우 취소합니다.
-	  const delHeartQuery = "Delete FROM heart WHERE user_idx = ? AND item_idx = ?"
-	  const delHeartResult = await db.queryParam_Parse(delHeartQuery, [userIdx, itemIdx]);
-  }else{
-	  //상품을 찜 하지 않았을 경우 등록합니다.
-	  const addHeartQuery = "INSERT INTO heart (user_idx, item_idx) VALUES (?,?)"
-	  const addHeartResult = await db.queryParam_Parse(addHeartQuery, [userIdx, itemIdx]);
-  }
-  
-  if(!isHeartResult){
-      res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.POST_BAD_RESULT));
-  }else{
-      res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_POST_ITEM, isHeartResult));
-  }
+	if(isHeartResult[0]["SUCCESS"] == 1){
+		//상품을 찜 해놓았을 경우 취소합니다.
+		const delHeartQuery = "Delete FROM heart WHERE user_idx = ? AND item_idx = ?"
+		const delHeartResult = await db.queryParam_Parse(delHeartQuery, [userIdx, itemIdx]);
+		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.DEL_LIKED_ITEM, delHeartResult));
+	}else{
+		//상품을 찜 하지 않았을 경우 등록합니다.
+		const addHeartQuery = "INSERT INTO heart (user_idx, item_idx) VALUES (?,?)" 
+		const addHeartResult = await db.queryParam_Parse(addHeartQuery, [userIdx, itemIdx]);
+		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ADD_LIKED_ITEM, addHeartResult));
+	}
+
 });
 
 module.exports = router;
