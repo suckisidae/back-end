@@ -61,10 +61,13 @@ module.exports = {
     PW_UPDATE_SUCCESS: "비밀번호 재설정 성공",
 
     UPDATE_USER_INFO_SUCCESS: "마이페이지 수정 성공",
-    UPDATE_USER_INFO_FAIL: "마이페이지 수정 실패"
-  
+    UPDATE_USER_INFO_FAIL: "마이페이지 수정 실패",
+
     ADD_LIKED_ITEM:"상품 찜 등록 성공",
     DEL_LIKED_ITEM:"상품 찜 삭제 성공",
-    BAD_LIKED_ITEM:"상품 상호작용 실패"
+    BAD_LIKED_ITEM:"상품 상호작용 실패",
+
+    SUCCESS_GET_CATEGORY:"카테고리 조회 성공",
+    GET_BAD_CATEGORY:"카테고리 조회 실패"
 
 };

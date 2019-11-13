@@ -23,15 +23,20 @@ router.get('/', async(req,res) =>{
     }
 });
 
-//게시물 하나 가져오기
+//게시물 조회 (게시물 하나)
 router.get('/:item_idx', async(req, res)=>{
     const itemIdx = req.params.item_idx;
+    const userIdx = req.body.user_idx;
     const getAllItemInfoQuery = "SELECT * FROM item WHERE item_idx = ?"
     const getAllItemInfoResult = await db.queryParam_Parse(getAllItemInfoQuery, [itemIdx])
 
     //조회수 증가 쿼리
     const addItemViewsQuery = "UPDATE item set views = views + 1 WHERE item_idx = ?"
     const addItemViewsResult = await db.queryParam_Parse(addItemViewsQuery, [itemIdx])
+
+    //visited 쿼리 (유저가 본 상품 추가)
+    const addVisitedQuery = "INSERT INTO visited (user_idx, item_idx) VALUES (?,?)";
+    const addVisitedResult = await db.queryParam_Parse(addVisitedQuery, [userIdx, itemIdx]);
 
     if(!getAllItemInfoResult){
         res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.GET_BAD_RESULT));
@@ -85,7 +90,7 @@ router.put('/:item_idx', async(req, res) =>{
     }
 });
 
-//계란찜 삭제하기
+//게시물 삭제하기
 router.delete('/:item_idx', async(req, res) =>{
 
     const itemIdx = req.params.item_idx;
