@@ -54,5 +54,10 @@ module.exports = {
     UPDATE_PW_SUCCESS: "비밀번호 수정 성공",
 
     PW_UPDATE_BAD_RESULT: "비밀번호 재설정 실패",
-    PW_UPDATE_SUCCESS: "비밀번호 재설정 성공"
+    PW_UPDATE_SUCCESS: "비밀번호 재설정 성공",
+
+    ADD_LIKED_ITEM:"상품 찜 등록 성공",
+    DEL_LIKED_ITEM:"상품 찜 삭제 성공",
+    BAD_LIKED_ITEM:"상품 상호작용 실패"
+    
 };

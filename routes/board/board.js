@@ -29,10 +29,14 @@ router.get('/:item_idx', async(req, res)=>{
     const getAllItemInfoQuery = "SELECT * FROM item WHERE item_idx = ?"
     const getAllItemInfoResult = await db.queryParam_Parse(getAllItemInfoQuery, [itemIdx])
 
+    //조회수 증가 쿼리
+    const addItemViewsQuery = "UPDATE item set views = views + 1 WHERE item_idx = ?"
+    const addItemViewsResult = await db.queryParam_Parse(addItemViewsQuery, [itemIdx])
+
     if(!getAllItemInfoResult){
         res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.GET_BAD_RESULT));
     }else{
-        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_GET_ITEM, getCateItemResult));
+        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_GET_ITEM, getAllItemInfoResult));
     }
 });
 
