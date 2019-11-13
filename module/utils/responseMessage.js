@@ -20,17 +20,17 @@ module.exports = {
     NO_SELECT_AUTHORITY: "조회 권한 없음.",
     USER_SELECTED: "회원 조회 성공.",
 
-    POST_BAD_RESULT: "아이템 등록 실패",
-    SUCCESS_POST_ITEM: "아이템 등록 성공",
+    ITEM_POST_BAD_RESULT: "아이템 등록 실패",
+    ITEM_POST_SUCCESS: "아이템 등록 성공",
 
-    PUT_BAD_RESULT: "아이템 수정 실패",
-    SUCCESS_PUT_ITEM: "아이템 수정 성공",
+    ITEM_PUT_BAD_RESULT: "아이템 수정 실패",
+    ITEM_PUT_SUCCESS: "아이템 수정 성공",
 
-    GET_BAD_RESULT: "아이템 조회 실패",
-    SUCCESS_GET_ITEM: "아이템 조회 성공",
+    ITEM_GET_BAD_RESULT: "아이템 조회 실패",
+    ITEM_GET_SUCCESS: "아이템 조회 성공",
 
-    DELETE_BAD_RESULT: "아이템 삭제 실패",
-    SUCCESS_DELETE_ITEM: "아이템 삭제 성공",
+    ITEM_DELETE_BAD_RESULT: "아이템 삭제 실패",
+    ITEM_DELETE_SUCCESS: "아이템 삭제 성공",
 
     COMMENT_POST_BAD_RESULT: "댓글 등록 실패",
     COMMENT_POST_SUCCESS: "댓글 등록 성공",
@@ -40,6 +40,9 @@ module.exports = {
 
     COMMENT_UPDATE_BAD_RESULT: "댓글 수정 실패",
     COMMENT_UPDATE_SUCCESS: "댓글 수정 성공",
+
+    COMMENT_DELETE_BAD_RESULT: "댓글 삭제 실패",
+    COMMENT_DELETE_SUCCESS: "댓글 삭제 성공",
 
     RECENT_ITEM_GET_BAD_RESULT: "최근 물품 읽기 실패",
     RECENT_ITEM_GET_SUCCESS: "최근 물품 읽기 성공",
@@ -59,6 +62,15 @@ module.exports = {
 
     PW_UPDATE_BAD_RESULT: "비밀번호 재설정 실패",
     PW_UPDATE_SUCCESS: "비밀번호 재설정 성공",
+
+    TALK_POST_BAD_RESULT: "메세지 보내기 실패",
+    TALK_POST_SUCCESS: "메세지 보내기 성공",
+
+    TALK_GET_BAD_RESULT: "메세지 조회 실패",
+    TALK_GET_SUCCESS: "메세지 조회 성공",
+
+    TALK_LIST_GET_BAD_RESULT: "메세지 목록 조회 실패",
+    TALK_LIST_GET_SUCCESS: "메세지 목록 조회 성공",
 
     UPDATE_USER_INFO_SUCCESS: "마이페이지 수정 성공",
     UPDATE_USER_INFO_FAIL: "마이페이지 수정 실패",
