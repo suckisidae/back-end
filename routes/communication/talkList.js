@@ -52,26 +52,8 @@ router.get('/', async(req, res)=>{
 	if(!result){
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.TALK_LIST_GET_BAD_RESULT));
 	}else{
-		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.TALK_LIST_GET_SUCCESS,  result));
+		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.TALK_LIST_GET_SUCCESS, result));
 	}
-
-	/*if(!getPeopleListResult){
-		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.NULL_VALUE));
-		return;
-	}
-
-	for(let i = 0; i < getPeopleListResult.length; i++){
-		console.log(getPeopleListResult[i]);
-	}*/
-/*
-	const getAllTalkListQuery = "SELECT DISTINCT to_user_idx, from_user_idx textd FROM chat WHERE from_user_idx = ?";
-	const getAllTalkListResult = await db.queryParam_Parse(getAllTalkListQuery, [from_user_idx]);
-
-	if(!getAllTalkListResult){
-		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.TALK_LIST_GET_BAD_RESULT));
-	}else{
-		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.TALK_LIST_GET_SUCCESS, getAllTalkListResult));
-	}*/
 });
 
 module.exports = router;
