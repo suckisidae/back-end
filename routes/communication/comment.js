@@ -8,29 +8,33 @@ const authUtils = require('../../module/utils/authUtils');
 const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 const moment = require('moment');
-
+// authUtils.isLoggedin, 
 //댓글 등록
-router.post('/', async(req,res)=>{
+router.post('/:item_idx', async(req,res)=>{
 
 	const date = moment().format("YYYY-MM-DD HH:mm:ss");
-	const {item_idx, writer_idx, text} = req.body;
+	const {text} = req.body;
+	const item_idx = req.params.item_idx;
+	// const writer_idx = req.decoded.idx;
+	const writer_idx = req.body.writer_idx
 	
-	if(!item_idx | !writer_idx | !text){
+	if(!writer_idx | !text){
 		res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
         return;
 	}
-
-	const insertCommentQuery = "INSERT INTO comment (item_idx, writer_idx, text, date) VALUES (?, ?, ?, ?)";
-	const insertCommentResult = await db.queryParam_Parse(insertCommentQuery, [item_idx, writer_idx, text, date]);
-
-	
-
-	if(!insertCommentResult){
-		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.COMMENT_POST_BAD_RESULT));
-	}else{
-		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.COMMENT_POST_SUCCESS, insertCommentResult));
+	const postCommentTransaction = await db.Transaction(async(connection) => {
+		const insertCommentQuery = "INSERT INTO comment (item_idx, writer_idx, text, date) VALUES (?, ?, ?, ?)";
+		const insertCommentResult = await connection.query(insertCommentQuery, [item_idx, writer_idx, text, date]);
+		// 댓글 등록에 성공했을 경우 알림
+		const getItemWriterResult = await connection.query(`SELECT writer_idx FROM item WHERE item_idx = ${item_idx}`);
+		// const itemWriterIdx = getItemWriterResult[0].writer_idx
+		const pushCommentNotificationResult = await connection.query(`INSERT INTO notification (type, user_idx, item_idx, date) VALUES (2, ${itemWriterIdx}, ${item_idx}, '${date}')`);
+	});
+	if(!postCommentTransaction) {
+		res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.COMMENT_POST_BAD_RESULT));
+	} else {
+		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.COMMENT_POST_SUCCESS, postCommentTransaction));
 	}
-
 });
 
 //해당 게시글 댓글 조회
