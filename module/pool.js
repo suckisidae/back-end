@@ -39,12 +39,13 @@ module.exports = {
     },
     Transaction: async (...args) => {
         let result = true;
+        
         try {
             const pool = await poolPromise;
             const connection = await pool.getConnection()
             try {
                 await connection.beginTransaction();
-                args.forEach(async (it) => await it(connection));
+                await args[0](connection, ...args)
                 await connection.commit();
             } catch (transactionError) {
                 await connection.rollback();

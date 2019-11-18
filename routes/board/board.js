@@ -90,11 +90,7 @@ router.put('/:item_idx', async(req, res) =>{
     }
 });
 
-<<<<<<< HEAD
 // 게시물 삭제하기
-=======
-//게시물 삭제하기
->>>>>>> 522e57530118fddb2443050e932356700afd3225
 router.delete('/:item_idx', async(req, res) =>{
 
     const itemIdx = req.params.item_idx;

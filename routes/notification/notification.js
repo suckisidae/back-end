@@ -8,7 +8,13 @@ const authUtils = require('../../module/utils/authUtils');
 const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
-/* GET home page. */
+/* 
+-notification type
+0 : new asked
+1 : exchange result
+2 : new comment
+*/
+
 router.get('/', function(req, res, next) {
   res.render('index', { title: 'comment' });
 });
