@@ -22,12 +22,13 @@ router.post('/:item_idx', async(req,res)=>{
 		res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
         return;
 	}
+	// 댓글 등록과 댓글 알림 트랜잭션 처리
 	const postCommentTransaction = await db.Transaction(async(connection) => {
 		const insertCommentQuery = "INSERT INTO comment (item_idx, writer_idx, text, date) VALUES (?, ?, ?, ?)";
 		const insertCommentResult = await connection.query(insertCommentQuery, [item_idx, writer_idx, text, date]);
 		// 댓글 등록에 성공했을 경우 알림
 		const getItemWriterResult = await connection.query(`SELECT writer_idx FROM item WHERE item_idx = ${item_idx}`);
-		// const itemWriterIdx = getItemWriterResult[0].writer_idx
+		const itemWriterIdx = getItemWriterResult[0].writer_idx
 		const pushCommentNotificationResult = await connection.query(`INSERT INTO notification (type, user_idx, item_idx, date) VALUES (2, ${itemWriterIdx}, ${item_idx}, '${date}')`);
 	});
 	if(!postCommentTransaction) {
