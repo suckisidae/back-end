@@ -17,7 +17,9 @@ router.get('/:user_idx', async(req,res) =>{
   // 찜 상품의 이름과 썸네일을 가져옵니다.
   const getLikeQuery = `SELECT thumbnail, title FROM item WHERE item_idx IN (SELECT item_idx FROM heart WHERE user_idx = ${userIdx}) ORDER BY writer_idx `;
   // 찜 상품의 닉네임과 아이디를 가져옵니다.
-  const getLikeItemRegUserQuery = `SELECT nickname, id FROM user WHERE user_idx IN (SELECT writer_idx FROM item WHERE item_idx IN (SELECT item_idx FROM heart WHERE user_idx = ${userIdx}))`
+  const getLikeItemRegUserQuery = `SELECT nickname, id FROM user WHERE user_idx` 
+  									+`IN (SELECT writer_idx FROM item WHERE item_idx` 
+									+`IN (SELECT item_idx FROM heart WHERE user_idx = ${userIdx}))`
   const getLikeResult = await db.queryParam_Parse(getLikeQuery,[userIdx]);
   const getLikeItemRegUserResult = await db.queryParam_Parse(getLikeItemRegUserQuery, [userIdx]);
 

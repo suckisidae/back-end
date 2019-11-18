@@ -21,6 +21,7 @@ router.get('/', async(req, res)=>{
         var getCategoryResult;
         var Category = new Array(0,0,0,0,0);
 
+        //찜한 목록수 만큼 반복
         for(var i = 0 ; i < getUserVisitedResult.length ; i++){
             const getCategoryQuery = "SELECT category_idx FROM item WHERE item_idx = ?"
             getCategoryResult = await db.queryParam_Parse(getCategoryQuery, [getUserVisitedResult[i].item_idx]);
@@ -36,22 +37,21 @@ router.get('/', async(req, res)=>{
             }
         }
         const maxCategory = Math.max.apply(Math, Category); 
+        //내가 제일 선호하는 카테고리를 구하였음.
         const favoriteCategoryIndex = Category.indexOf(maxCategory);
 
-        //카테고리에 해당하는 물건 읽어오기
-
-		//const getAllItemQuery = "SELECT item_idx FROM item WHERE category_idx = ? ";
-        const getAllItemQuery = "SELECT DISTINCT item.item_idx, item.category_idx FROM visited, item WHERE visited.user_idx != ? AND visited.item_idx = item.item_idx AND "
-        const getAllItemResult = await db.queryParam_Parse(getAllItemQuery, [userIdx]);
+        //내가 선호하는 카테고리에서 내가 봤던 물품들을 제외하고 3개 가져옴 (차집합)
+        const getRecommendItemQuery = "SELECT thumbnail, title FROM item WHERE NOT EXISTS (SELECT 1 FROM visited WHERE visited.item_idx = item.item_idx AND user_idx = ?) AND category_idx = ? ORDER BY item.views DESC LIMIT 3"
+        const getRecommendItemResult = await db.queryParam_Parse(getRecommendItemQuery, [userIdx, favoriteCategoryIndex]);
         
-        for(var i = 0 ; i < getAllItemResult.length ; i++){
-            if(getAllItemResult[i].category_idx != favoriteCategoryIndex)
-            delete getAllItemResult[i];
+        console.log(getRecommendItemResult)
+        
+        if(!getRecommendItemResult){	
+            res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ITEM_GET_BAD_RESULT));
+        }else{
+            res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ITEM_GET_SUCCESS, getRecommendItemResult));
         }
 
-        const result = getAllItemResult.filter(function(val) { return val !== null; });
-        console.log(result)
-        
 });
 
 module.exports = router;
