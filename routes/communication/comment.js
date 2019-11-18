@@ -8,15 +8,14 @@ const authUtils = require('../../module/utils/authUtils');
 const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 const moment = require('moment');
-// authUtils.isLoggedin, 
+
 //댓글 등록
-router.post('/:item_idx', async(req,res)=>{
+router.post('/:item_idx', authUtils.isLoggedin, async(req,res)=>{
 
 	const date = moment().format("YYYY-MM-DD HH:mm:ss");
 	const {text} = req.body;
 	const item_idx = req.params.item_idx;
-	// const writer_idx = req.decoded.idx;
-	const writer_idx = req.body.writer_idx
+	const writer_idx = req.decoded.idx;
 	
 	if(!writer_idx | !text){
 		res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
