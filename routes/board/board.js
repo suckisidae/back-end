@@ -91,6 +91,7 @@ router.put('/:item_idx', async(req, res) =>{
 });
 
 // 게시물 삭제하기
+
 router.delete('/:item_idx', async(req, res) =>{
 
     const itemIdx = req.params.item_idx;
