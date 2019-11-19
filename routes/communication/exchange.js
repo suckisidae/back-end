@@ -9,6 +9,11 @@ const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 const moment = require('moment');
 
+// trade state
+// 0 : 거래요청
+// 1 : 거래거절
+// 2 : 거래완료
+
 /* 거래요청하기 */
 router.post('/:item_idx', async (req, res) => {
     const otherItemIdx = req.params.item_idx;
@@ -38,6 +43,11 @@ router.post('/:item_idx', async (req, res) => {
         res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ASK_EXCHANGE_SUCCESS, `${myItemIdx}번 물품과 ${otherItemIdx}번물품 의 교환신청 성공`));
     }
 });
+
+/* 거래요청 수락*/
+router.put('/:item_idx', async(req, res) => {
+    const {user_idx, myItem_idx, otherItem_idx}
+})
 
 /* 거래요청 취소*/
 router.delete('/:item_idx', async (req, res) => {
