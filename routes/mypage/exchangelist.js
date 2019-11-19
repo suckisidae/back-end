@@ -13,7 +13,7 @@ router.get('/', async(req, res) => {
 
     const {user_idx} = req.body
 
-	//거래 안료된 내 아이템, 상대 아이템 인덱스르 DB에서 읽어옴
+	//거래 완료된 내 아이템, 상대 아이템 인덱스를 DB에서 읽어옴
 	const tradeHistoryQuery = "SELECT my_item_idx My, other_item_idx Other FROM trade WHERE state = 2 AND my_item_idx IN (SELECT item_idx FROM item WHERE writer_idx = ?)"
 	const tradeHistoryResult = await db.queryParam_Parse(tradeHistoryQuery, [user_idx]);
 
