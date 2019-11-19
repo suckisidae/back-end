@@ -93,5 +93,11 @@ module.exports = {
     ASK_EXCHANGE_FAIL: "거래요청 실패",
     OVER_THREE_PRODUCT: "내 물건이 3개 초과입니다",
     DELETE_EXCHANGE_FAIL: "거래 삭제 실패",
-    DELETE_EXCHANGE_SUCCESS: "거래 삭제 성공"
+    DELETE_EXCHANGE_SUCCESS: "거래 삭제 성공",
+
+    NOTIFICATION_GET_SUCCESS: "알림 읽기 성공",
+    NOTIFICATION_GET_BAD_RESULT: "알림 읽기 실패",
+
+    NOTIFICATION_DELETE_SUCCESS: "알림 삭제 성공",
+    NOTIFICATION_DELETE_BAD_RESULT: "알림 삭제 실패"
 };
