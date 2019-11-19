@@ -8,8 +8,14 @@ const authUtils = require('../../module/utils/authUtils');
 const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
+
 // 내가 요청받은 상품 조회
-router.get('/', async(req, res)=>{
+//router.get('/', async(req, res)=>{
+
+// 내가 요청한 상품 조회
+router.get('/', authUtils.isLoggedin, async(req, res) => {
+    const userIdx = req.decoded.idx;
+
     
     /*const {user_idx} = req.body;//'나'의 idx, 나중에 token으로 대체
     

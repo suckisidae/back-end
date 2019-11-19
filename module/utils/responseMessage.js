@@ -32,8 +32,8 @@ module.exports = {
     ITEM_DELETE_BAD_RESULT: "아이템 삭제 실패",
     ITEM_DELETE_SUCCESS: "아이템 삭제 성공",
 
-    COMMENT_POST_BAD_RESULT: "댓글 등록 실패",
-    COMMENT_POST_SUCCESS: "댓글 등록 성공",
+    COMMENT_POST_BAD_RESULT: "댓글 등록 및 댓글알림 보내기 실패",
+    COMMENT_POST_SUCCESS: "댓글 등록 및 댓글알림 보내기 성공",
 
     COMMENT_GET_BAD_RESULT: "댓글 조회 실패",
     COMMENT_GET_SUCCESS:"댓글 조회 성공",
