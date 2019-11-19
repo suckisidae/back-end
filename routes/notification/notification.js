@@ -10,9 +10,9 @@ const jwt = require('../../module/jwt');
 
 /* 
 -notification type
-0 : new asked
-1 : exchange result
-2 : new comment
+0 : new asked	-> exchange.js
+1 : exchange result	-> 
+2 : new comment	-> comment.js
 */
 
 router.get('/', function(req, res, next) {
