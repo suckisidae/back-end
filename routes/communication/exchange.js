@@ -11,8 +11,7 @@ const moment = require('moment');
 
 // trade state
 // 0 : 거래요청
-// 1 : 거래거절
-// 2 : 거래완료
+// 1 : 거래완료
 
 /* 거래요청하기 */
 router.post('/:item_idx', async (req, res) => {
@@ -45,14 +44,35 @@ router.post('/:item_idx', async (req, res) => {
 });
 
 /* 거래요청 수락*/
-router.put('/:item_idx', async(req, res) => {
-    const {user_idx, myItem_idx, otherItem_idx}
-})
+router.put('/', async(req, res) => {
+    const {user_idx, to_item_idx, from_item_idx} = req.body;
+    const date = moment().format("YYYY-MM-DD HH:mm:ss");
+    
+    const allowExchangeTransaction = await db.Transaction(async(connection) => {
+        // 거래요청 수락한 row의 status는 1로 바뀜(거래 완료)
+        const updateExchangeStatusQuery = `UPDATE trade SET state = 1 WHERE from_item_idx = ? AND to_item_idx = ?`;
+        const updateExchangeStatusResult = await connection.query(updateExchangeStatusQuery, [from_item_idx, to_item_idx]);
+
+        // 요청보낸 물품들의 유저들의 인덱스를 불러옴
+        const selectOtherUserInfoQuery = `SELECT DISTINCT from_user_idx, from_item_idx FROM trade WHERE to_item_idx = ? AND from_item_idx NOT IN ?`;
+        const selectOtherUserInfoResult = await connection.query(selectOtherUserInfoQuery, [to_item_idx, from_item_idx]);
+
+        // 이와 동시에 삭제된 내역의 유저들에게 알림이 감
+        const insertExchangeNotificationQuery = `INSERT INTO notification (type, user_idx, item_idx, date) VALUES (?, ?, ?, ${date})`;
+        for (i in selectOtherUserInfoResult) {
+            connection.query(insertExchangeNotificationQuery, [1, selectOtherUserInfoResult[i].from_user_idx, selectOtherUserInfoResult[i].from_item_idx])
+        }
+        // 거래요청 수락한 물품의 다른 거래 내역은 삭제됨
+        const deleteOtherExchangeQuery = `DELETE FROM trade WHERE to_item_idx = ${to_item_idx} AND from_item_idx NOT IN ${from_item_idx}`;
+        const deleteOtherExchangeResult = await connection.query(deleteOtherExchangeQuery);
+    })
+    
+});
 
 /* 거래요청 취소*/
-router.delete('/:item_idx', async (req, res) => {
-    const to_item_idx = req.params.item_idx;
-    const from_item_idx = req.body.item_idx;
+router.delete('/', async (req, res) => {
+    const to_item_idx = req.from.to_item_idx;
+    const from_item_idx = req.body.from_item_idx;
 
     const deleteExchangeQuery = `DELETE FROM trade WHERE from_item_idx = ${from_item_idx} AND to_item_idx = ${to_item_idx} ORDER BY date DESC LIMIT 1`;
     const deleteExchangeResult = await db.queryParam_Parse(deleteExchangeQuery);
