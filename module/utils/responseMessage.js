@@ -99,5 +99,8 @@ module.exports = {
     NOTIFICATION_GET_BAD_RESULT: "알림 읽기 실패",
 
     NOTIFICATION_DELETE_SUCCESS: "알림 삭제 성공",
-    NOTIFICATION_DELETE_BAD_RESULT: "알림 삭제 실패"
+    NOTIFICATION_DELETE_BAD_RESULT: "알림 삭제 실패",
+
+    ALLOW_EXCHANGE_FAIL: "거래요청 수락 실패",
+    ALLOW_EXCHANGE_SUCCESS: "거래요청 수락 성공",
 };

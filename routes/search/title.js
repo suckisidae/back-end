@@ -8,7 +8,7 @@ const authUtils = require('../../module/utils/authUtils');
 const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
-// 제목 검색
+// 제목검색
 router.get('/', async(req, res) => {
     const keyword = req.query.keyword;
     const getSearchQuery = `SELECT DISTINCT item_idx, title, user.nickname, thumbnail, text FROM item, user WHERE item.title LIKE '%${keyword}%' AND user.user_idx = item.writer_idx ORDER BY date DESC`;
