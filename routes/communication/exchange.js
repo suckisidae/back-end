@@ -48,25 +48,37 @@ router.put('/', async(req, res) => {
     const {user_idx, to_item_idx, from_item_idx} = req.body;
     const date = moment().format("YYYY-MM-DD HH:mm:ss");
     
+    // 거래요청 수락 트랜잭션
     const allowExchangeTransaction = await db.Transaction(async(connection) => {
         // 거래요청 수락한 row의 status는 1로 바뀜(거래 완료)
         const updateExchangeStatusQuery = `UPDATE trade SET state = 1 WHERE from_item_idx = ? AND to_item_idx = ?`;
         const updateExchangeStatusResult = await connection.query(updateExchangeStatusQuery, [from_item_idx, to_item_idx]);
 
-        // 요청보낸 물품들의 유저들의 인덱스를 불러옴
-        const selectOtherUserInfoQuery = `SELECT DISTINCT from_user_idx, from_item_idx FROM trade WHERE to_item_idx = ? AND from_item_idx NOT IN ?`;
+        // 요청보낸 물품들의 유저들의 인덱스와 물품들의 인덱스를 불러옴
+        const selectOtherUserInfoQuery = `SELECT DISTINCT from_user_idx, from_item_idx FROM trade WHERE to_item_idx = ? AND from_item_idx NOT IN (?)`;
         const selectOtherUserInfoResult = await connection.query(selectOtherUserInfoQuery, [to_item_idx, from_item_idx]);
 
+        // from_user_idx를 구한다
+        const selectFromUserInfoQuery = `SELECT writer_idx FROM item WHERE item_idx = ${from_item_idx}`;
+        const selectFromUserInfoResult = await connection.query(selectFromUserInfoQuery);
+
         // 이와 동시에 삭제된 내역의 유저들에게 알림이 감
-        const insertExchangeNotificationQuery = `INSERT INTO notification (type, user_idx, item_idx, date) VALUES (?, ?, ?, ${date})`;
+        const insertExchangeNotificationQuery = `INSERT INTO notification (type, user_idx, item_idx, date) VALUES (?, ?, ?, '${date}')`;
         for (i in selectOtherUserInfoResult) {
-            connection.query(insertExchangeNotificationQuery, [1, selectOtherUserInfoResult[i].from_user_idx, selectOtherUserInfoResult[i].from_item_idx])
+            if (selectFromUserInfoResult[0].writer_idx != selectOtherUserInfoResult[i].from_user_idx){
+                let insertExchangeNotificationResult = await connection.query(insertExchangeNotificationQuery, [1, selectOtherUserInfoResult[i].from_user_idx, selectOtherUserInfoResult[i].from_item_idx])
+            }
         }
         // 거래요청 수락한 물품의 다른 거래 내역은 삭제됨
-        const deleteOtherExchangeQuery = `DELETE FROM trade WHERE to_item_idx = ${to_item_idx} AND from_item_idx NOT IN ${from_item_idx}`;
+        const deleteOtherExchangeQuery = `DELETE FROM trade WHERE to_item_idx = ${to_item_idx} AND from_item_idx NOT IN (${from_item_idx})`;
         const deleteOtherExchangeResult = await connection.query(deleteOtherExchangeQuery);
     })
-    
+
+    if (!allowExchangeTransaction){
+        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ALLOW_EXCHANGE_FAIL));
+    } else {
+        res.status(201).send(utils.successTrue(statusCode.CREATED, resMessage.ALLOW_EXCHANGE_SUCCESS));
+    }
 });
 
 /* 거래요청 취소*/
