@@ -12,8 +12,8 @@ const moment = require('moment');
 /* 거래요청하기 */
 router.post('/:item_idx', async (req, res) => {
     const otherItemIdx = req.params.item_idx;
-   // const user_idx = JSON.parse(req.body.user_idx); //user_idx "내가 누군지" 추가 , 추후 토큰 변경
-   // const myItemIdx = JSON.parse(req.body.item_idx); // 문자열 배열로 주기 ex) [15, 16, 78]
+    //const user_idx = JSON.parse(req.body.user_idx); //user_idx "내가 누군지" 추가 , 추후 토큰 변경
+    //const myItemIdx = JSON.parse(req.body.item_idx); // 문자열 배열로 주기 ex) [15, 16, 78]
     const {user_idx, myItemIdx} = req.body;
     const date = moment().format("YYYY-MM-DD HH:mm:ss");
     if(myItemIdx.length > 3){   // 내 물건이 3개 초과일때 에러
