@@ -23,13 +23,16 @@ router.get('/', async(req, res)=>{
 		return;
 	}
 
+
 	//추가해야 하는 것 :  상대 물품의 썸네일, 상대 물건의 이름, 상대 닉네임, 상대 아이디, 내 썸네일, 내 물건 이름, 요청한 시간
 	/*buf안에 들어갈 객체 : {requested_item_thumbnail : ,requested_item_title:,requested_user_nickname,requested_user_id, 
-		ask_item_thumbnail:, ask_item_title:, date:}
-	*/	
+		ask_item_thumbnail:, ask_item_title:, date:}*/
+		
 	let buf = [];
-	
+
 	for(let i = 0; i < getMyTradeResult.length; i++){
+
+		
 		//내가 교환 신청을 한 상대의 물품 인덱스의 정보를 저장한다.
 		const getOtherItemQuery = "SELECT thumbnail, title, writer_idx FROM item WHERE item_idx = ?";
 		const getOtherItemResult = await db.queryParam_Parse(getOtherItemQuery, [getMyTradeResult[i].to_item_idx]);
@@ -75,11 +78,9 @@ router.get('/', async(req, res)=>{
 			buf[i].ask_item_title = getMyItemResult[k].title;
 		}
 	}
-
-	console.log(buf);
-
-
+	
 	const result = buf;
+	
 	if(!result){
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ASK_ITEM_GET_BAD_RESULT));
 	}else{

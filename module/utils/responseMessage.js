@@ -91,6 +91,9 @@ module.exports = {
     ASK_ITEM_GET_BAD_RESULT:"거래 요청한 물품 조회 실패",
     ASK_ITEM_GET_SUCCESS:"거래 요청한 물품 조회 성공",
 
+    REQUESTED_ITEM_GET_BAD_RESULT:"거래 요청받은 물품 조회 실패",
+    REQUESTED_ITEM_GET_SUCCESS:"거래 요청받은 물품 조회 성공",
+
     SUCCESS_GET_CATEGORY:"카테고리 조회 성공",
     GET_BAD_CATEGORY:"카테고리 조회 실패",
 
