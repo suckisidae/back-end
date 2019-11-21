@@ -19,6 +19,16 @@ router.get('/:to_user_idx', async(req, res)=>{ //대화 상대를 받아온다
 	//조회 시 '내가 보낸 메세지' 와 '상대에게서 받은 메세지'가 다 보여야 하므로 or로 나눠준다.
 	const getAllTalkQuery = "SELECT * FROM chat WHERE (from_user_idx = ? AND to_user_idx = ?) OR (to_user_idx = ? AND from_user_idx = ?) ORDER BY date ASC";
 	const getAllTalkResult = await db.queryParam_Parse(getAllTalkQuery, [from_user_idx,to_user_idx,from_user_idx,to_user_idx]);
+	
+	//대화 상대와의 메세지를 하면 읽음으로 표시를 바꾼다. 단, 여기서 나에게 보낸 상대 메세지 상태만 바꾼다.
+	//=>현실적으로 상대가 나의 메세지를 읽어야 답장을 하고 내가 그 메세지를 읽는 순서기 때문.
+	const updateReadCheckQuery = "UPDATE chat SET readCheck = 1 WHERE from_user_idx = ? AND to_user_idx = ?"
+	const updateReadCheckResult = await db.queryParam_Parse(updateReadCheckQuery, [to_user_idx,from_user_idx]);
+
+	if(!updateReadCheckResult){
+		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.READ_CHECK_UPDATE_FAIL));
+		return;
+	}
 
 	if(!getAllTalkResult){
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.TALK_GET_BAD_RESULT));

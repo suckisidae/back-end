@@ -47,6 +47,39 @@ router.get('/', async(req, res)=>{
 			}
 		}
 	}
+	
+	//마지막 메세지가 '나' 인 것은 안읽은 메세지 개수가 0이다.
+	//마지막 메세지가 '나' 가 아닌 것에서는 상대를 기억하고 그 사람과 나의 채팅 중 읽음표시가 아닌 것의 개수를 세서 돌려준다. 각 객체에 추가할수있나?
+	
+	//안읽은 메세지 개수 구하기
+	let noReadcount = [];
+	//count.push(2);
+	for(let i = 0; i < buf.length; i++){ //각각의 안읽은 메세지 개수를 구해야하니 전체목록을 한번 훑는다.
+		if(buf[i].from_user_idx == from_user_idx){ 
+			//마지막 메세지가 '나' 인 경우는 안읽은 메세지 개수가 0이다.
+			noReadcount[i] = {"COUNT(readCheck)": 0};
+		}else{
+			//마지막 메세지가 '나' 가 아닌 경우는 안읽은 메세지 개수를 count해야한다.
+
+			//메세지 목록에서 from과 to가 같은 메세지들 중 상대 메세지만 시간기준 내림차순으로 뽑아서 그 챗 인덱스의 noREAD = 0인 것을 count한다
+			const getNoReadQuery = "SELECT COUNT(CASE WHEN readCheck=0 THEN 1 END) FROM chat WHERE from_user_idx = ? AND to_user_idx = ? ORDER BY date DESC";
+			const getNoReadResult = await db.queryParam_Parse(getNoReadQuery, [buf[i].from_user_idx,from_user_idx]);
+			
+			//결과가 빈 경우
+			if(!getNoReadResult){
+				res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NO_READ_GET_BAD_RESULT));
+				return;
+			}
+			
+			//결과를 저장한다.
+			noReadcount[i] = getNoReadResult[0];
+		}
+	}
+	
+	//각 객체에 안읽은 메세지 개수 추가
+	for(let i = 0; i < buf.length; i++){
+		buf[i].noRead = noReadcount[i];
+	}
 
 	const result = buf;
 	if(!result){
