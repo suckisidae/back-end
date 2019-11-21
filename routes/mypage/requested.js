@@ -12,7 +12,7 @@ const jwt = require('../../module/jwt');
 // 대기:0 거절:1 수락:2
 router.get('/', async(req, res) => {
 	const {user_idx} = req.body;//'나'의 idx, 나중에 token으로 대체
-    let result = [];//최종결과물
+   
 	//교환요청을 받은 모든 물품을 가져온다
 	const getAllTradeQuery = "SELECT DISTINCT to_item_idx FROM trade ORDER BY date ASC"; //중복제거
 	const getAllTradeResult = await db.queryParam_Parse(getAllTradeQuery);
@@ -50,11 +50,41 @@ router.get('/', async(req, res) => {
 		}
 		
 	}
+	
+	let result = [];//최종결과물
+	//내 거래내역에서 필요한 정보들을 가져온다
+	for(let i = 0; i < myTrade.length; i++){
+		let buf = {};
+		//거래 요청 한 상대의 물품 정보 (하나 가져오는거)
+		const getAskItemQuery = "SELECT title, thumbnail, writer_idx FROM item WHERE item_idx = ?";
+		const getAskItemResult = await db.queryParam_Parse(getAskItemQuery,[myTrade[i].from_item_idx]);
+		
+		buf.ask_item_idx = myTrade[i].from_item_idx;
+		buf.ask_item_title = getAskItemResult[0].title;
+		buf.ask_item_thumbnail = getAskItemResult[0].thumbnail;
+		//거래 요청 한 상대의 id, 닉네임
+		const getAskUserQuery = "SELECT nickname, id FROM user WHERE user_idx = ?";
+		const getAskUserResult = await db.queryParam_Parse(getAskUserQuery,[getAskItemResult[0].writer_idx]);
+		buf.ask_user_nickname = getAskUserResult[0].nickname;
+		buf.ask_user_id = getAskUserResult[0].id;
 
-	if(!myTrade){
+		//거래를 요청 받은 나의 물품 정보
+		const getRequestedItemQuery = "SELECT title, thumbnail FROM item WHERE item_idx = ?";
+		const getRequestedItemResult = await db.queryParam_Parse(getRequestedItemQuery,[myTrade[i].to_item_idx]);
+		
+		buf.requested_item_title = getRequestedItemResult[0].title;
+		buf.requested_item_thumbnail = getRequestedItemResult[0].thumbnail;
+		
+		//거래 요청 시간 추가
+		buf.date = myTrade[i].date;
+		
+		result.push(buf);
+	}
+
+	if(!result){
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.REQUESTED_ITEM_GET_BAD_RESULT));
 	}else{
-		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.REQUESTED_ITEM_GET_SUCCESS, myTrade));
+		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.REQUESTED_ITEM_GET_SUCCESS, result));
 	}
 });
 
