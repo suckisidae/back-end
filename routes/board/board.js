@@ -81,8 +81,8 @@ router.put('/:item_idx', authUtils.isLoggedin, async(req, res) =>{
 });
 
 //게시물 삭제하기
-router.delete('/:item_idx', async(req, res) =>{
-    const userIdx = req.body.user_idx;//req.decoded.idx;
+router.delete('/:item_idx', authUtils.isLoggedin, async(req, res) =>{
+    const userIdx = req.decoded.idx;
     const itemIdx = req.params.item_idx;
 
     const selectWriterIdxQuery = `SELECT writer_idx FROM item WHERE item_idx = ${itemIdx}`;
