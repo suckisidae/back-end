@@ -74,6 +74,10 @@ module.exports = {
 
     NO_TALK_LIST: "대화 목록 없음",
 
+    NO_READ_GET_BAD_RESULT: "안읽은 메세지 개수 불러오기 실패",
+
+    READ_CHECK_UPDATE_FAIL: "메세지 읽음 업데이트 실패",
+
     UPDATE_USER_INFO_SUCCESS: "마이페이지 수정 성공",
     UPDATE_USER_INFO_FAIL: "마이페이지 수정 실패",
 
@@ -83,8 +87,12 @@ module.exports = {
 
     GET_MY_PRODUCT_FAIL:"내 상품조회 실패",
     GET_MY_PRODUCT_SUCCESS: "내 상품조회 성공",
-    ASKED_ITEM_GET_BAD_RESULT:"거래 요청받은 물품 조회 실패",
-    ASKED_ITEM_GET_SUCCESS:"거래 요청받은 물품 조회 성공",
+
+    ASK_ITEM_GET_BAD_RESULT:"거래 요청한 물품 조회 실패",
+    ASK_ITEM_GET_SUCCESS:"거래 요청한 물품 조회 성공",
+
+    REQUESTED_ITEM_GET_BAD_RESULT:"거래 요청받은 물품 조회 실패",
+    REQUESTED_ITEM_GET_SUCCESS:"거래 요청받은 물품 조회 성공",
 
     SUCCESS_GET_CATEGORY:"카테고리 조회 성공",
     GET_BAD_CATEGORY:"카테고리 조회 실패",
