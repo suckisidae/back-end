@@ -14,7 +14,7 @@ router.get('/', async(req, res) => {
     const {user_idx} = req.body
 
 	//거래 완료된 내 아이템, 상대 아이템 인덱스를 DB에서 읽어옴
-	const tradeHistoryQuery = "SELECT my_item_idx My, other_item_idx Other FROM trade WHERE state = 2 AND my_item_idx IN (SELECT item_idx FROM item WHERE writer_idx = ?)"
+	const tradeHistoryQuery = "SELECT my_item_idx My, other_item_idx Other FROM trade WHERE state = 1 AND my_item_idx IN (SELECT item_idx FROM item WHERE writer_idx = ?)"
 	const tradeHistoryResult = await db.queryParam_Parse(tradeHistoryQuery, [user_idx]);
 
 	var tradeMyItemInfoResult;
@@ -46,5 +46,44 @@ router.get('/', async(req, res) => {
 	}
 
 });
+
+//해당 거래 별점주기
+router.put('/:trade_idx', async(req, res)=>{ //trade_idx는 거래내역 안에 있는 거래이므로 무조건 state가 1일 것이다.
+	const trade_idx = req.params.trade_idx;
+	const {user_idx} = req.body; //내가 trade_idx의 to_user_idx일수 있고 from_user_idx일 수 있으며 trade와 별개로 내가 별점을 준다면 star테이블에서는 from_user_idx가 된다.
+
+
+
+	//STAR테이블에 기록된 거래인지 확인한다. trade_idx에서 별점을 준 사람이 '나' 인 경우 (상대도 나에게 별점을 줄 수 있다=>하나의 거래에 두개의 평점이 메겨질 수 있음)
+	const getStarQuery = "SELECT star_idx FROM star WHERE trade_idx = ? AND from_user_idx = ?";
+	const getStarResult = await db.queryParam_Parse(getStarQuery, [trade_idx, user_idx]);
+	//한번 별점을 준 상태라면 오류메세지와 리턴시킨다.
+	if(getStarResult){ //존재한다면
+		res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ALREADY_STAR_DONE));
+        return;
+	}
+
+	//존재하지 않는다면 별점을 줄 차례
+	console.log("Can star");
+
+	/*//별점은 한번만 줄 수 있다.
+	const insertCommentQuery = "INSERT INTO (trade_idx, from_user_idx, to_user_idx, grade)) star VALUES ()";
+	const insertCommentResult = await db.queryParam_Parse(updateCommentQuery, [text, date, comment_idx]);
+
+
+
+	//user테이블의 평점을 바꿔준다.	
+	const updateCommentQuery = "UPDATE comment SET text=?, date=? WHERE comment_idx = ?"; //시간, 텍스트만 수정  작성자 수정x
+	const updateCommentResult = await db.queryParam_Parse(updateCommentQuery, [text, date, comment_idx]);
+
+
+
+	if(!updateCommentResult){
+		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.COMMENT_UPDATE_BAD_RESULT));
+	}else{
+		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.COMMENT_UPDATE_SUCCESS, updateCommentResult));
+	}*/
+});
+
 
 module.exports = router;
