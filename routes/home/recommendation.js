@@ -9,10 +9,10 @@ const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
 //추천 상품 조회
-router.get('/', async(req, res)=>{
+router.get('/', authUtils.isLoggedin, async(req, res)=>{
 
-		const userIdx = req.body.user_idx;
-    
+		const userIdx = req.decoded.idx;
+
         //내가 찜한 목록 가져오기
 		const getUserVisitedQuery = "SELECT item_idx FROM heart WHERE user_idx = ?"
         const getUserVisitedResult = await db.queryParam_Parse(getUserVisitedQuery, [userIdx]);

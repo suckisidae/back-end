@@ -9,9 +9,9 @@ const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
 //대화 목록 조회
-router.get('/', async(req, res)=>{
+router.get('/', authUtils.isLoggedin, async(req, res)=>{
 	//내가 누구들과 대화를 하고있는지! 내가 대화를 나누고있는 사람들 목록과 그 사람들과의 가장 최근 메세지를 반환한다.
-	const {from_user_idx} = req.body; //"나" , 나중에 토큰으로 변경
+	const from_user_idx = req.decoded.idx; //"나"
 	
 	//'나'가 포함된 채팅들을 내림차순 정리한다.(최신순)
 	const getRecentMeListQuery = "SELECT * FROM chat WHERE from_user_idx = ? OR to_user_idx = ? ORDER BY date DESC";

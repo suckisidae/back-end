@@ -9,9 +9,9 @@ const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
 // 내가 요청 한 상품 조회
-router.get('/', async(req, res)=>{
+router.get('/', authUtils.isLoggedin, async(req, res)=>{
 	
-    const {user_idx} = req.body;//'나'의 idx, 나중에 token으로 대체
+    const user_idx = req.decoded.idx;//'나'의 idx
     
 	//내가 포함 된 거래의 정보를 읽어온다. 오름차순으로 ->시간순
 	const getMyTradeQuery = "SELECT * FROM trade WHERE from_user_idx = ? AND state = 0 ORDER BY date ASC";
