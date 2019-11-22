@@ -32,8 +32,8 @@ module.exports = {
     ITEM_DELETE_BAD_RESULT: "아이템 삭제 실패",
     ITEM_DELETE_SUCCESS: "아이템 삭제 성공",
 
-    COMMENT_POST_BAD_RESULT: "댓글 등록 실패",
-    COMMENT_POST_SUCCESS: "댓글 등록 성공",
+    COMMENT_POST_BAD_RESULT: "댓글 등록 및 댓글알림 보내기 실패",
+    COMMENT_POST_SUCCESS: "댓글 등록 및 댓글알림 보내기 성공",
 
     COMMENT_GET_BAD_RESULT: "댓글 조회 실패",
     COMMENT_GET_SUCCESS:"댓글 조회 성공",
@@ -101,5 +101,14 @@ module.exports = {
     ASK_EXCHANGE_FAIL: "거래요청 실패",
     OVER_THREE_PRODUCT: "내 물건이 3개 초과입니다",
     DELETE_EXCHANGE_FAIL: "거래 삭제 실패",
-    DELETE_EXCHANGE_SUCCESS: "거래 삭제 성공"
+    DELETE_EXCHANGE_SUCCESS: "거래 삭제 성공",
+
+    NOTIFICATION_GET_SUCCESS: "알림 읽기 성공",
+    NOTIFICATION_GET_BAD_RESULT: "알림 읽기 실패",
+
+    NOTIFICATION_DELETE_SUCCESS: "알림 삭제 성공",
+    NOTIFICATION_DELETE_BAD_RESULT: "알림 삭제 실패",
+
+    ALLOW_EXCHANGE_FAIL: "거래요청 수락 실패",
+    ALLOW_EXCHANGE_SUCCESS: "거래요청 수락 성공",
 };
