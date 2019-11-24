@@ -9,6 +9,7 @@ module.exports = {
     ABLE_ID: "사용가능한 ID",
     ALREADY_NICKNAME: "닉네임 중복",
     ABLE_NICKNAME: "사용가능한 닉네임",
+    UNAUTHORIZED: "권한이 없는 유저입니다.",
 
     INVALID_TOKEN: "잘못된 형식의 토큰입니다.",
     EMPTY_TOKEN: "토큰값이 존재하지 않습니다.",

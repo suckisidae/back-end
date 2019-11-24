@@ -8,18 +8,17 @@ const authUtils = require('../../module/utils/authUtils');
 const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
-/* GET home page. */
+router.get('/', authUtils.isLoggedin, async (req, res) => {
 
-router.get('/:user_idx', async (req, res) => {
-
-	const userIdx = req.params.user_idx;
+	const userIdx = req.decoded.idx;
 
 	// 찜 상품의 이름과 썸네일을 가져옵니다.
 	const getLikeQuery = `SELECT thumbnail, title FROM item WHERE item_idx IN (SELECT item_idx FROM heart WHERE user_idx = ${userIdx}) ORDER BY writer_idx `;
+	const getLikeResult = await db.queryParam_Parse(getLikeQuery);
+
 	// 찜 상품의 닉네임과 아이디를 가져옵니다.
 	const getLikeItemRegUserQuery = `SELECT nickname, id FROM user WHERE user_idx IN (SELECT writer_idx FROM item WHERE item_idx IN (SELECT item_idx FROM heart WHERE user_idx = ${userIdx}))`
-	const getLikeResult = await db.queryParam_Parse(getLikeQuery, [userIdx]);
-	const getLikeItemRegUserResult = await db.queryParam_Parse(getLikeItemRegUserQuery, [userIdx]);
+	const getLikeItemRegUserResult = await db.queryParam_Parse(getLikeItemRegUserQuery);
 
 	//2개의 쿼리문에 있는 상품의 정보(닉네임, 아이디, 썸네일, 타이틀)을 합칩니다.
 	for (i in getLikeItemRegUserResult) {
@@ -37,10 +36,10 @@ router.get('/:user_idx', async (req, res) => {
 	찜 버튼 상호작용 
 	찜 등록/취소 하기
 */
-router.post('/:item_idx', async (req, res) => {
+router.post('/:item_idx', authUtils.isLoggedin, async (req, res) => {
 
 	const itemIdx = req.params.item_idx;
-	const userIdx = 2;
+	const userIdx = req.decoded.idx;
 
 	//user가 상품을 찜했는지 확인합니다.
 	const isHeartQuery = "SELECT EXISTS (SELECT * FROM heart WHERE user_idx = ? AND item_idx = ?) as SUCCESS"

@@ -9,10 +9,10 @@ const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
 // 거래 요청받은 상품 조회
-// 대기:0 거절:1 수락:2
-router.get('/', async(req, res) => {
-	const {user_idx} = req.body;//'나'의 idx, 나중에 token으로 대체
-	
+// 대기:0 수락:1
+router.get('/', authUtils.isLoggedin, async(req, res) => {
+	const user_idx = req.decoded.idx;//'나'의 idx
+
 	//교환요청을 받은 모든 물품을 가져온다
 	const getAllTradeQuery = "SELECT DISTINCT to_item_idx FROM trade ORDER BY date ASC"; //중복제거
 	const getAllTradeResult = await db.queryParam_Parse(getAllTradeQuery);

@@ -8,7 +8,7 @@ const authUtils = require('../../module/utils/authUtils');
 const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
-/* GET home page. */
+// 카테고리 리스트 불러오기
 router.get('/:categoryItemList', async (req, res) => {
 
     const itemList = req.params.categoryItemList;

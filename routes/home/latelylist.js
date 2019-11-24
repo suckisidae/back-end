@@ -8,9 +8,7 @@ const authUtils = require('../../module/utils/authUtils');
 const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
-/* GET home page. */
-
-
+// 홈화면에서 보이는 카테고리별 최근 6개의 물품들
 router.get('/', async(req, res)=>{
 	//식료품
 	const getRecentFoodQuery = "SELECT * FROM item WHERE category_idx = ? ORDER BY date DESC LIMIT 6";
@@ -41,9 +39,6 @@ router.get('/', async(req, res)=>{
 	}else{
 		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.RECENT_ITEM_GET_SUCCESS, getAllRecentResult));
 	}
-
-	
-
 });
 
 module.exports = router;

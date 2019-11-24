@@ -14,7 +14,7 @@ const moment = require('moment');
 router.get('/', async(req,res) =>{
 
     const getItemQuery = "SELECT thumbnail, title FROM item ORDER BY views ASC";
-    const getItemResult = await db.queryParam_Parse(getItemQuery,) 
+    const getItemResult = await db.queryParam_Parse(getItemQuery) 
 
     if(!getItemResult){
         res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ITEM_GET_BAD_RESULT));
@@ -24,8 +24,8 @@ router.get('/', async(req,res) =>{
 });
 
 //게시물 조회 (게시물 하나)
-router.get('/:item_idx', async(req, res)=>{
-    const itemIdx = req.params.item_idx;
+router.get('/:item_idx', authUtils.isLoggedin, async(req, res)=>{
+    const itemIdx = req.decoded.idx;
     const userIdx = req.body.user_idx;
     const getAllItemInfoQuery = "SELECT * FROM item WHERE item_idx = ?"
     const getAllItemInfoResult = await db.queryParam_Parse(getAllItemInfoQuery, [itemIdx])
@@ -46,16 +46,11 @@ router.get('/:item_idx', async(req, res)=>{
 });
 
 //게시물 등록하기
-router.post('/', async(req, res) =>{
+router.post('/', authUtils.isLoggedin, async(req, res) =>{
 
-    const writer_idx = req.body.writer_idx;
+    const writer_idx = req.decoded.idx;
     const date = moment().format("YYYY-MM-DD HH:mm:ss");
-    const thumbnail = req.body.thumbnail;
-    const hashtag = req.body.hashtag;
-    const text = req.body.text;
-    const category_idx = req.body.category_idx;
-    const title = req.body.title;
-    // const {writer_idx, date, thumbnail, hashtag, text, category_idx, title} = req.body
+    const {thumbnail,hashtag, text, category_idx, title} = req.body;
 
     const insertItemQuery = "INSERT INTO item (writer_idx, date , thumbnail, hashtag, text, category_idx, title) VALUES (?,?,?,?,?,?,?)";
     const insertItemResult = await db.queryParam_Parse(insertItemQuery, [writer_idx, date , thumbnail, hashtag, text, category_idx, title]);
@@ -68,17 +63,12 @@ router.post('/', async(req, res) =>{
 });
 
 //게시물 수정하기
-router.put('/:item_idx', async(req, res) =>{
+router.put('/:item_idx', authUtils.isLoggedin, async(req, res) =>{
 
     const itemIdx = req.params.item_idx;
-    const writer_idx = req.body.writer_idx;
+    const writer_idx = req.decoded.idx;
     const date = moment().format("YYYY-MM-DD HH:mm:ss");
-    const thumbnail = req.body.thumbnail;
-    const hashtag = req.body.hashtag;
-    const text = req.body.text;
-    const category_idx = req.body.category_idx;
-    const title = req.body.category_idx;
-    // const {writer_idx, date, thumbnail, hashtag, text, category_idx, title} = req.body
+    const {thumbnail,hashtag, text, category_idx, title} = req.body;
 
     const itemUpdateQuery = "UPDATE item SET date = ?, thumbnail = ?, hashtag = ?, text = ?, category_idx = ?, title = ? WHERE item_idx = ?"    
     const itemUpdateResult = await db.queryParam_Parse(itemUpdateQuery, [date , thumbnail, hashtag, text, category_idx, title, itemIdx]);
@@ -91,16 +81,29 @@ router.put('/:item_idx', async(req, res) =>{
 });
 
 //게시물 삭제하기
-router.delete('/:item_idx', async(req, res) =>{
-
+router.delete('/:item_idx', authUtils.isLoggedin, async(req, res) =>{
+    const userIdx = req.decoded.idx;
     const itemIdx = req.params.item_idx;
-    const itemDeleteQuery = "Delete FROM item WHERE item_idx = ?"
-    const itemDeleteResult = await db.queryParam_Parse(itemDeleteQuery, [itemIdx])
+
+    const selectWriterIdxQuery = `SELECT writer_idx FROM item WHERE item_idx = ${itemIdx}`;
+    const selectWriterIdxResult = await db.queryParam_Parse(selectWriterIdxQuery);
+
+    if(!selectWriterIdxResult[0]){
+        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ITEM_DELETE_BAD_RESULT));
+        return;
+    }
+    if(selectWriterIdxResult[0].writer_idx != userIdx){
+        res.status(401).send(utils.successFalse(statusCode.UNAUTHORIZED, resMessage.UNAUTHORIZED));
+        return;
+    }
+
+    const itemDeleteQuery = "DELETE FROM item WHERE item_idx = ?";
+    const itemDeleteResult = await db.queryParam_Parse(itemDeleteQuery, [itemIdx]);
 
     if(!itemDeleteResult){
         res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ITEM_DELETE_BAD_RESULT));
     }else{
-        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ITEM_DELETE_SUCCESS, ItemDeleteResult));
+        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ITEM_DELETE_SUCCESS, itemDeleteResult));
     }
 });
 

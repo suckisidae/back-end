@@ -14,9 +14,10 @@ const moment = require('moment');
 // 1 : 거래완료
 
 /* 거래요청하기 */
-router.post('/:item_idx', async (req, res) => {
+router.post('/:item_idx', authUtils.isLoggedin, async (req, res) => {
     const otherItemIdx = req.params.item_idx;
-    const {user_idx, myItemIdx} = req.body;// 문자열 배열로 주기 ex) [15, 16, 78]
+    const myItemIdx = req.body.myItemIdx;// 문자열 배열로 주기 ex) [15, 16, 78]
+    const user_idx = req.decoded.idx;
     const date = moment().format("YYYY-MM-DD HH:mm:ss");
 
     if(myItemIdx.length > 3){   // 내 물건이 3개 초과일때 에러
@@ -45,8 +46,8 @@ router.post('/:item_idx', async (req, res) => {
 });
 
 /* 거래요청 수락*/
-router.put('/', async(req, res) => {
-    const {user_idx, to_item_idx, from_item_idx} = req.body;
+router.put('/', authUtils.isLoggedin, async(req, res) => {
+    const {to_item_idx, from_item_idx} = req.body;
     const date = moment().format("YYYY-MM-DD HH:mm:ss");
     
     // 거래요청 수락 트랜잭션
@@ -83,7 +84,7 @@ router.put('/', async(req, res) => {
 });
 
 /* 거래요청 취소*/
-router.delete('/', async (req, res) => {
+router.delete('/', authUtils.isLoggedin, async (req, res) => {
     const to_item_idx = req.from.to_item_idx;
     const from_item_idx = req.body.from_item_idx;
 

@@ -9,11 +9,10 @@ const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 const moment = require('moment');
 
-/* GET home page. */
-router.get('/:to_user_idx', async(req, res)=>{ //대화 상대를 받아온다
+router.get('/:to_user_idx', authUtils.isLoggedin, async(req, res)=>{ //대화 상대를 받아온다
 	//최근이 아래 =>오름차순
 	
-	const {from_user_idx} = req.body; //나중에 토큰으로 처리
+	const from_user_idx = req.decoded.idx;
 	const to_user_idx = req.params.to_user_idx;
 	
 	//조회 시 '내가 보낸 메세지' 와 '상대에게서 받은 메세지'가 다 보여야 하므로 or로 나눠준다.
@@ -38,13 +37,14 @@ router.get('/:to_user_idx', async(req, res)=>{ //대화 상대를 받아온다
 });
 
 //채팅 메세지 추가
-router.post('/', async(req,res)=>{
+router.post('/', authUtils.isLoggedin, async(req,res)=>{
 	//from_user_idx :지금 메세지 보내는 '나'
 	//to_user_idx :상대방
 	//text 
 	//date 
 	const date = moment().format("YYYY-MM-DD HH:mm:ss");
-	const {from_user_idx, to_user_idx, text} = req.body;
+	const {to_user_idx, text} = req.body;
+	const from_user_idx = req.decoded.idx;
 	
 	//주고받는 사람, 텍스트가 비었는지 확인
 	if(!from_user_idx | !to_user_idx | !text){
