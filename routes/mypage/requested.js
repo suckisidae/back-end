@@ -23,6 +23,7 @@ router.get('/', authUtils.isLoggedin, async(req, res) => {
 		return;
 	}
 
+	//item 테이블에서 교환요청을 받은 물품이면서 그 물품의 작성자가 user_idx인 물품의 item_idx를 뽑아서 myItem배열에 저장한다.
 	let myItem = [];
 	for(let i = 0; i < getAllTradeResult.length; i++){
 		const getMyItemQuery = "SELECT item_idx FROM item WHERE item_idx = ? AND writer_idx = ?";
@@ -34,7 +35,7 @@ router.get('/', authUtils.isLoggedin, async(req, res) => {
 		myItem.push(getMyItemResult[0]);
 	}
 
-	//내 거래 내역을 가져온다
+	//내 물품이 요청받은 물품인 trade_idx와 해당 거래의 모든 정보를 myTrade에 저장한다.
 	let myTrade = [];
 	for(let i = 0; i < myItem.length; i++){
 		
@@ -45,6 +46,8 @@ router.get('/', authUtils.isLoggedin, async(req, res) => {
 			continue;
 		}
 		
+		//거래를 요청 받은 나의 물품이 여러 물품에게 거래요청을 받았을 경우를 생각한다.
+		//예) 4 ->5   3->5  요청이면 위 쿼리문에서는 4,3의 거래 내용을 가지고 있기 때문에 그 길이만큼 for문을 돌려 저장한다.
 		for(let k = 0; k < getMyTradeResult.length; k++){
 			myTrade.push(getMyTradeResult[k]);
 		}

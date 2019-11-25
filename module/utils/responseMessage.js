@@ -112,4 +112,7 @@ module.exports = {
 
     ALLOW_EXCHANGE_FAIL: "거래요청 수락 실패",
     ALLOW_EXCHANGE_SUCCESS: "거래요청 수락 성공",
+
+    ALREADY_STAR_DONE: "이미 별점을 준 거래입니다.",
+    SUCCESS_UPDATE_STAR: "별점 주기 및 업데이트 성공"
 };
