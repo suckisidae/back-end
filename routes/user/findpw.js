@@ -31,7 +31,7 @@ router.get('/', async(req, res)=>{
 //비밀번호 재설정
 router.put('/', async(req, res)=>{
 
-	const {user_idx, password} = req.body;
+	const {user_id, password} = req.body;
 
 	//비밀번호가 비어있는 경우
 	if(!password){
@@ -41,10 +41,10 @@ router.put('/', async(req, res)=>{
 
 	//비밀번호 재설정
 	const encryptionResult = await encryption.encrypt(password);//암호화
-	const updatePWQuery = "UPDATE user SET password = ?, salt = ? WHERE user_idx = ?";
-	const updatePWResult = await db.queryParam_Parse(updatePWQuery, [encryptionResult.hashed, encryptionResult.salt, user_idx]);
+	const updatePWQuery = "UPDATE user SET password = ?, salt = ? WHERE id = ?";
+	const updatePWResult = await db.queryParam_Parse(updatePWQuery, [encryptionResult.hashed, encryptionResult.salt, user_id]);
 	
-	if(!updatePWResult){
+	if(!updatePWResult[0]){
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.PW_UPDATE_BAD_RESULT));
 	}else{
 		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.PW_UPDATE_SUCCESS, updatePWResult));
