@@ -9,10 +9,10 @@ const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 const encryption = require('../../module/encryption');
 
-
+//아이디 중복 검사 필요함.
 router.post('/', upload.single('photo'), async(req,res) => {
     const {id, nickname, password, intro, pw_ask, pw_answer} = req.body;
-    const photo = req.file.location
+    const photo = req.file.location;
     if(!id || !nickname || !password || !intro || !pw_answer || !pw_ask){
         res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
         return;

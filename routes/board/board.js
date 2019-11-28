@@ -12,23 +12,33 @@ const moment = require('moment');
 
 //게시물 조회 (게시물 하나)
 router.get('/:item_idx', authUtils.isLoggedin, async(req, res)=>{
-    const itemIdx = req.decoded.idx;
-    const userIdx = req.body.user_idx;
+    const userIdx = req.decoded.idx;
+    const itemIdx = req.params.item_idx;
     const getAllItemInfoQuery = "SELECT * FROM item WHERE item_idx = ?"
     const getAllItemInfoResult = await db.queryParam_Parse(getAllItemInfoQuery, [itemIdx])
 
-    //조회수 증가 쿼리
-    const addItemViewsQuery = "UPDATE item set views = views + 1 WHERE item_idx = ?"
-    const addItemViewsResult = await db.queryParam_Parse(addItemViewsQuery, [itemIdx])
-
-    //visited 쿼리 (유저가 본 상품 추가)
-    const addVisitedQuery = "INSERT INTO visited (user_idx, item_idx) VALUES (?,?)";
-    const addVisitedResult = await db.queryParam_Parse(addVisitedQuery, [userIdx, itemIdx]);
+    //아이템 존재 유무 판단
+    const checkItemExistQuery = 'SELECT EXISTS (SELECT item_idx FROM item WHERE item_idx = ?) as SUCCESS'
+    const checkItemExistResult = await db.queryParam_Parse(checkItemExistQuery, [itemIdx])
+    //아이템이 없을 경우
+    if(checkItemExistResult[0]["SUCCESS"] == 0){
+        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ITEM_GET_BAD_RESULT));
+        return;
+    }
 
     if(!getAllItemInfoResult){
-        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ITEM_GET_SUCCESS));
+        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ITEM_GET_BAD_RESULT));
     }else{
-        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ITEM_GET_SUCCESS, getCateItemResult));
+
+        //조회수 증가 쿼리
+        const addItemViewsQuery = "UPDATE item set views = views + 1 WHERE item_idx = ?"
+        const addItemViewsResult = await db.queryParam_Parse(addItemViewsQuery, [itemIdx])
+
+        //visited 쿼리 (유저가 본 상품 추가)
+        const addVisitedQuery = "INSERT INTO visited (user_idx, item_idx) VALUES (?,?)";
+        const addVisitedResult = await db.queryParam_Parse(addVisitedQuery, [userIdx, itemIdx]);
+
+        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ITEM_GET_SUCCESS, getAllItemInfoResult));
     }
 });
 
@@ -63,7 +73,7 @@ router.put('/:item_idx', authUtils.isLoggedin, async(req, res) =>{
     if(!itemUpdateResult){
         res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ITEM_PUT_BAD_RESULT));
     }else{
-        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ITEM_PUT_SUCCESS, ItemUpdateResult));
+        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ITEM_PUT_SUCCESS, itemUpdateResult));
     }
 });
 
