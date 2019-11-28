@@ -55,11 +55,17 @@ router.put('/', authUtils.isLoggedin, async(req, res) => {
         // 거래요청 수락한 row의 status는 1로 바뀜(거래 완료)
         const updateExchangeStatusQuery = `UPDATE trade SET state = 1 WHERE from_item_idx = ? AND to_item_idx = ?`;
         const updateExchangeStatusResult = await connection.query(updateExchangeStatusQuery, [from_item_idx, to_item_idx]);
-
+        if (updateExchangeStatusResult.affectedRows === 0){
+            res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ALLOW_EXCHANGE_FAIL));
+            return;
+        }
         // 요청보낸 물품들의 유저들의 인덱스와 물품들의 인덱스를 불러옴
         const selectOtherUserInfoQuery = `SELECT DISTINCT from_user_idx, from_item_idx FROM trade WHERE to_item_idx = ? AND from_item_idx NOT IN (?)`;
         const selectOtherUserInfoResult = await connection.query(selectOtherUserInfoQuery, [to_item_idx, from_item_idx]);
-
+        if (!selectOtherUserInfoResult[0]){
+            res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ALLOW_EXCHANGE_FAIL));
+            return;
+        }
         // from_user_idx를 구한다
         const selectFromUserInfoQuery = `SELECT writer_idx FROM item WHERE item_idx = ${from_item_idx}`;
         const selectFromUserInfoResult = await connection.query(selectFromUserInfoQuery);
@@ -72,10 +78,14 @@ router.put('/', authUtils.isLoggedin, async(req, res) => {
             }
         }
         // 거래요청 수락한 물품의 다른 거래 내역은 삭제됨
-        const deleteOtherExchangeQuery = `DELETE FROM trade WHERE to_item_idx = ${to_item_idx} AND from_item_idx NOT IN (${from_item_idx})`;
+        const deleteOtherExchangeQuery = `DELETE FROM trade WHERE to_item_idx = ${to_item_idx} AND state = 0 AND from_item_idx NOT IN (${from_item_idx})`;
         const deleteOtherExchangeResult = await connection.query(deleteOtherExchangeQuery);
+        if (deleteOtherExchangeResult.affectedRows === 0){
+            res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ALLOW_EXCHANGE_FAIL));
+            return;
+        }
     })
-
+    
     if (!allowExchangeTransaction){
         res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ALLOW_EXCHANGE_FAIL));
     } else {
@@ -91,7 +101,7 @@ router.delete('/', authUtils.isLoggedin, async (req, res) => {
     const deleteExchangeQuery = `DELETE FROM trade WHERE from_item_idx = ${from_item_idx} AND to_item_idx = ${to_item_idx} ORDER BY date DESC LIMIT 1`;
     const deleteExchangeResult = await db.queryParam_Parse(deleteExchangeQuery);
 
-    if (!deleteExchangeResult) {
+    if (deleteExchangeResult.affectedRows === 0) {
         res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.DELETE_EXCHANGE_FAIL));
     } else {
         res.status(200).send(utils.successTrue(statusCode.OK, resMessage.DELETE_EXCHANGE_SUCCESS, deleteExchangeResult));
