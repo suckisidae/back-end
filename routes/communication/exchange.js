@@ -71,7 +71,6 @@ router.put('/', authUtils.isLoggedin, async(req, res) => {
                 let insertExchangeNotificationResult = await connection.query(insertExchangeNotificationQuery, [1, selectOtherUserInfoResult[i].from_user_idx, selectOtherUserInfoResult[i].from_item_idx])
             }
         }
-        // (from = x or to = x) or (from = y or to = y) and state = 0
         // 거래시 to_item_idx 또는 from_item_idx에 관련된 다른 거래내역은 모두 삭제됨
         const deleteOtherExchangeQuery = `DELETE FROM trade WHERE (to_item_idx = ? OR to_item_idx = ? OR from_item_idx = ? OR from_item_idx = ?) AND state = 0`;
         const deleteOtherExchangeResult = await connection.query(deleteOtherExchangeQuery, [to_item_idx, from_item_idx, to_item_idx, from_item_idx]);
