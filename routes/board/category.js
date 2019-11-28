@@ -9,12 +9,12 @@ const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
 // 카테고리 리스트 불러오기
-router.get('/:categoryItemList', async (req, res) => {
+router.get('/:category_idx', async (req, res) => {
 
-    const itemList = req.params.categoryItemList;
+    const itemList = req.params.category_idx;
 
-    const getCategoryListInfoQuery = "SELECT thumbnail, title FROM item WHERE category_idx = ?"
-    const getCategoryListInfoResult = await db.queryParam_Parse(getCategoryListInfoQuery, [itemList])
+    const getCategoryListInfoQuery = "SELECT thumbnail, title FROM item WHERE category_idx = ? ORDER BY views ASC";
+    const getCategoryListInfoResult = await db.queryParam_Parse(getCategoryListInfoQuery, [itemList]);
 
     if (!getCategoryListInfoResult[0]) {
         res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.GET_BAD_CATEGORY));
@@ -24,22 +24,5 @@ router.get('/:categoryItemList', async (req, res) => {
 
 });
 
-
-// 카테고리에 해당하는 모든 아이템 불러오기 (품목 전체보기)
-router.get('/list/:listIdx', async (req, res) => {
-
-    const cateIdx = req.params.listIdx;
-    const getCateInfoQuery = "SELECT * FROM category WHERE category_idx = ?"
-    const getCateInfoResult = await db.queryParam_Parse(getCateInfoQuery, [cateIdx])
-
-
-    if (!getCateInfoResult) {
-        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.GET_BAD_CATEGORY));
-    } else {
-        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_GET_CATEGORY, getCateInfoResult));
-    }
-
-
-});
 
 module.exports = router;

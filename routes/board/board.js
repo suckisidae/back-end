@@ -8,20 +8,7 @@ const authUtils = require('../../module/utils/authUtils');
 const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 const moment = require('moment');
-/* GET home page. */
 
-//전체 목록 가져오기
-router.get('/', async(req,res) =>{
-
-    const getItemQuery = "SELECT thumbnail, title FROM item ORDER BY views ASC";
-    const getItemResult = await db.queryParam_Parse(getItemQuery) 
-
-    if(!getItemResult){
-        res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ITEM_GET_BAD_RESULT));
-    }else{
-        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ITEM_GET_SUCCESS, getCateItemResult));
-    }
-});
 
 //게시물 조회 (게시물 하나)
 router.get('/:item_idx', authUtils.isLoggedin, async(req, res)=>{
