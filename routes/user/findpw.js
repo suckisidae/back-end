@@ -13,12 +13,12 @@ const encryption = require('../../module/encryption');
 //비밀번호 찾기
 router.get('/', async(req, res)=>{
 	//유저idx, 질문idx, 대답
-	const {user_idx, pw_ask, pw_answer} = req.body;
+	const {user_id, pw_ask, pw_answer} = req.body;
 
 	//디비의 정보와 일치한지 확인
-	const getFindPWQuery = "SELECT * FROM user WHERE user_idx = ? AND pw_ask = ? AND pw_answer = ?";
-	const getFindPWResult = await db.queryParam_Parse(getFindPWQuery, [user_idx, pw_ask, pw_answer]);
-
+	const getFindPWQuery = "SELECT * FROM user WHERE id = ? AND pw_ask = ? AND pw_answer = ?";
+	const getFindPWResult = await db.queryParam_Parse(getFindPWQuery, [user_id, pw_ask, pw_answer]);
+	
 	if(!getFindPWResult[0]){
 		//비밀번호 찾기 실패
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.FIND_PW_BAD_RESULT));
@@ -44,7 +44,7 @@ router.put('/', async(req, res)=>{
 	const updatePWQuery = "UPDATE user SET password = ?, salt = ? WHERE id = ?";
 	const updatePWResult = await db.queryParam_Parse(updatePWQuery, [encryptionResult.hashed, encryptionResult.salt, user_id]);
 	
-	if(!updatePWResult[0]){
+	if(!(updatePWResult.affectedRows === 1)){
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.PW_UPDATE_BAD_RESULT));
 	}else{
 		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.PW_UPDATE_SUCCESS, updatePWResult));

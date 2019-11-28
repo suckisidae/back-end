@@ -24,10 +24,10 @@ router.get('/', authUtils.isLoggedin, async (req, res) => {
 	const getAllNotificationQuery = "SELECT i.title, i.thumbnail, n.type FROM item i, notification n WHERE i.item_idx IN (SELECT item_idx FROM notification WHERE user_idx = ?)"
 	const getAllNotificationResult = await db.queryParam_Parse(getAllNotificationQuery, [userIdx]);
 
-	if (!getAllNotificationResult) {
-		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.notification_GET_BAD_RESULT));
+	if (!getAllNotificationResult[0]) {
+		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage. NOTIFICATION_GET_BAD_RESULT));
 	} else {
-		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.notification_GET_SUCCESS, getAllNotificationResult));
+		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.NOTIFICATION_GET_SUCCESS, getAllNotificationResult));
 	}
 
 });
@@ -38,8 +38,8 @@ router.delete('/:notification_idx', authUtils.isLoggedin, async (req, res) => {
 	const notificationIdx = req.params.notification_idx;
 	const delReadNotificationQuery = "Delete FROM notification WHERE notification_idx = ?";
 	const delReadNotificationResult = await db.queryParam_Parse(delReadNotificationQuery, [notificationIdx]);
-
-	if (!delReadNotificationResult) {
+	console.log(delReadNotificationResult.affectedRows);
+	if (!(delReadNotificationResult.affectedRows !== 0)) {
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NOTIFICATION_DELETE_BAD_RESULT));
 	} else {
 		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.NOTIFICATION_DELETE_SUCCESS, delReadNotificationResult));
