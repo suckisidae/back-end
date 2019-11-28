@@ -47,4 +47,57 @@ router.get('/', authUtils.isLoggedin, async(req, res) => {
 
 });
 
+//해당 거래 별점주기
+router.put('/:trade_idx', async(req, res)=>{ //trade_idx는 거래내역 안에 있는 거래이므로 무조건 state가 1일 것이다.
+	const trade_idx = req.params.trade_idx;
+	const {user_idx, grade} = req.body; //내가 trade_idx의 to_user_idx일수 있고 from_user_idx일 수 있으며 trade와 별개로 내가 별점을 준다면 star테이블에서는 from_user_idx가 된다.
+
+
+	//별점은 한번만 줄 수 있다.
+	//STAR테이블에 기록된 거래인지 확인한다. trade_idx에서 별점을 준 사람이 '나' 인 경우 (상대도 나에게 별점을 줄 수 있다=>하나의 거래에 두개의 평점이 메겨질 수 있음)
+	const getStarQuery = "SELECT star_idx FROM star WHERE trade_idx = ? AND from_user_idx = ?";
+	const getStarResult = await db.queryParam_Parse(getStarQuery, [trade_idx, user_idx]);
+
+	//한번 별점을 준 상태라면 오류메세지와 리턴시킨다.
+	if(getStarResult[0]){ 
+		//존재한다면
+		res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ALREADY_STAR_DONE));
+		return;
+	}
+
+	//존재하지 않는다면
+	const whoAmIQuery = "SELECT from_user_idx FROM trade WHERE trade_idx = ?";
+	const whoAmIResult = await db.queryParam_Parse(whoAmIQuery, [trade_idx]);
+	var getToUserQuery;
+	var getToUserResult;
+	var otherUser;
+	//내가 해당 거래의 from일 경우
+	if(whoAmIResult[0].from_user_idx == user_idx){
+
+		//상대 유저의 idx를 얻어옴
+		getToUserQuery = "SELECT writer_idx FROM item WHERE item_idx = (SELECT to_item_idx From trade WHERE trade_idx = ?)"
+		getToUserResult = await db.queryParam_Parse(getToUserQuery, [trade_idx]);
+		otherUser = getToUserResult[0].writer_idx;
+
+	//내가 해당 거래의 to일 경우
+	}else{
+
+		//상대 유저의 idx를 얻어옴
+		getToUserQuery = "SELECT from_user_idx From trade WHERE trade_idx = ?"
+		getToUserResult = await db.queryParam_Parse(getToUserQuery, [trade_idx]);
+		otherUser = getToUserResult[0].from_user_idx;
+	}
+
+
+	const StarQuery = "INSERT INTO star (trade_idx, from_user_idx, to_user_idx, grade) VALUE (?, ?, ?, ?)"
+	const StarResult = await db.queryParam_Parse(StarQuery, [trade_idx, user_idx, otherUser, grade]);
+
+	if(!StarResult){	
+		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.GET_BAD_RESULT));
+	}else{
+		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_GET_ITEM, StarResult));
+	}
+
+});
+
 module.exports = router;
