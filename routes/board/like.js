@@ -60,8 +60,3 @@ router.post('/:item_idx', authUtils.isLoggedin, async (req, res) => {
 });
 
 module.exports = router;
-
-/*
-찜 목록 불러오기
-찜 등록 / 취소 하기
-*/
