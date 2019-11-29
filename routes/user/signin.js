@@ -11,16 +11,19 @@ const encryption = require('../../module/encryption')
 
 router.post('/', async (req, res) => {
 	const {id, password} = req.body;
+	
+	console.log(id);
+	console.log(password);
 
 	if (!id || !password){
-		res.statusCode(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
+		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
 		return;
 	}
 	const getUserPasswordQuery = `SELECT user_idx, password, salt FROM user WHERE id = '${id}'`
 	const getUserPasswordResult = await db.queryParam_None(getUserPasswordQuery)
 
 	if(!getUserPasswordResult){
-		res.statusCode(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NOT_FIND_USER));
+		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NOT_FIND_USER));
 		return;
 	}
 	const passwordHashed = await encryption.encryptWithSalt(password, getUserPasswordResult[0].salt);
@@ -33,6 +36,6 @@ router.post('/', async (req, res) => {
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.LOGIN_FAIL));
 	}
 
-})
+});
 
 module.exports = router;
