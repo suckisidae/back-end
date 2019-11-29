@@ -12,7 +12,7 @@ const jwt = require('../../module/jwt');
 router.get('/', async(req, res) => {
     const keyword = req.query.keyword;
     const getSearchQuery = `SELECT DISTINCT item_idx, title, user.nickname, thumbnail, text FROM item, user WHERE item.title LIKE '%${keyword}%' AND user.user_idx = item.writer_idx ORDER BY date DESC`;
-    const getSearchResult = await db.queryParam_Parse(getSearchQuery)
+    var getSearchResult = await db.queryParam_Parse(getSearchQuery)
 
     if(getSearchResult[0] == null){
         res.status(400).send(utils.successFalse(statusCode.NOT_FOUND, resMessage.SEARCH_TITLE_BAD_RESULT));
