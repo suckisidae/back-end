@@ -44,7 +44,7 @@ router.get('/:item_idx', async(req, res)=>{
 	const getAllCommentQuery = "SELECT * FROM comment WHERE item_idx = ?";
 	const getAllCommentResult = await db.queryParam_Parse(getAllCommentQuery, [itemIdx]);
 
-	if(!getAllCommentQuery){
+	if(getAllCommentResult[0] == undefined){
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.COMMENT_GET_BAD_RESULT));
 	}else{
 		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.COMMENT_GET_SUCCESS, getAllCommentResult));
