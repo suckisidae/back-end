@@ -29,7 +29,7 @@ router.get('/:to_user_idx', authUtils.isLoggedin, async(req, res)=>{ //대화 �
 		return;
 	}
 
-	if(!getAllTalkResult){
+	if(!getAllTalkResult[0]){
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.TALK_GET_BAD_RESULT));
 	}else{
 		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.TALK_GET_SUCCESS, getAllTalkResult));
