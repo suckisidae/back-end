@@ -12,10 +12,11 @@ const jwt = require('../../module/jwt');
 router.get('/', async (req, res) => {
     const nickname = req.body.nickname;
 
-    const nicknameCheckQuery = `SELECT nickname FROM user WHERE nickname = '${nickname}'`;
+    //존재 유무 확인
+    const nicknameCheckQuery = `SELECT EXISTS (SELECT nickname FROM user WHERE nickname = '${nickname}') as SUCCESS`;
     const nicknameCheckResult = await db.queryParam_Parse(nicknameCheckQuery);
-
-    if (!nicknameCheckResult[0]) {
+    
+    if (!nicknameCheckResult[0]["SUCCESS"]) {
         res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ABLE_NICKNAME));
     } else {
         res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ALREADY_NICKNAME));

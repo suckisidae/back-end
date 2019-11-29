@@ -14,7 +14,7 @@ router.get('/', authUtils.isLoggedin, async(req, res) => {
     const user_idx = req.decoded.idx;
 
 	//거래 완료된 내 아이템, 상대 아이템 인덱스를 DB에서 읽어옴
-	const tradeHistoryQuery = "SELECT my_item_idx My, other_item_idx Other FROM trade WHERE state = 1 AND my_item_idx IN (SELECT item_idx FROM item WHERE writer_idx = ?)"
+	const tradeHistoryQuery = "SELECT from_item_idx My, to_item_idx Other FROM trade WHERE state = 1 AND from_item_idx IN (SELECT item_idx FROM item WHERE writer_idx = ?)"
 	const tradeHistoryResult = await db.queryParam_Parse(tradeHistoryQuery, [user_idx]);
 
 	var tradeMyItemInfoResult;
