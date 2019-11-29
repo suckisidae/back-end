@@ -15,7 +15,7 @@ router.get('/', authUtils.isLoggedin, async(req, res) => {
     const getMyProductQuery = `SELECT thumbnail, title, date FROM item WHERE writer_idx = '${userIdx}' ORDER BY date DESC`;
     const getMyProductResult = await db.queryParam_Parse(getMyProductQuery);
 
-    if(!getMyProductResult){
+    if(!getMyProductResult[0]){
         res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST,resMessage.GET_MY_PRODUCT_FAIL))
     } else {
         res.status(200).send(utils.successTrue(statusCode.OK, resMessage.GET_MY_PRODUCT_SUCCESS, getMyProductResult));
