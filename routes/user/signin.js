@@ -19,9 +19,9 @@ router.post('/', async (req, res) => {
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
 		return;
 	}
-	const getUserPasswordQuery = `SELECT user_idx, password, salt FROM user WHERE id = '${id}'`
+	const getUserPasswordQuery = `SELECT user_idx, password, nickname, salt FROM user WHERE id = '${id}'`
 	const getUserPasswordResult = await db.queryParam_None(getUserPasswordQuery)
-
+	console.log(getUserPasswordResult[0].nickname)
 	if(!getUserPasswordResult){
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NOT_FIND_USER));
 		return;
@@ -29,7 +29,9 @@ router.post('/', async (req, res) => {
 	const passwordHashed = await encryption.encryptWithSalt(password, getUserPasswordResult[0].salt);
 	
 	if(getUserPasswordResult[0].password == passwordHashed.hashed){
-		const getToken = jwt.sign(getUserPasswordResult[0].user_idx);
+		let getToken = [];
+		getToken[0] = jwt.sign(getUserPasswordResult[0].user_idx);
+		getToken[1] = getUserPasswordResult[0].nickname;	 
 		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.LOGIN_SUCCESS, getToken));
 		return;
 	} else {
