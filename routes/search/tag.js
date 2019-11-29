@@ -15,16 +15,16 @@ router.get('/byDate', async (req, res) => {
 	const getSearchQuery = `SELECT DISTINCT item_idx, title, user.nickname, thumbnail, text FROM item, user WHERE item.hashtag LIKE '%${keyword}%' AND user.user_idx = item.writer_idx ORDER BY date DESC`;
 	const getSearchResult = await db.queryParam_Parse(getSearchQuery)
 
-	const result = [];
+	let result = [];
 
 	for(i in getSearchResult) {
 		result[i] = getSearchResult[i];
 	}
 
 	if (getSearchResult[0] == null) {
-		res.status(400).send(utils.successFalse(statusCode.NOT_FOUND, resMessage.SEARCH_TEXT_FAIL));
+		res.status(400).send(utils.successFalse(statusCode.NOT_FOUND, resMessage.SEARCH_HASHTAG_FAIL));
 	} else {
-		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SEARCH_TEXT_SUCCESS, result));
+		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SEARCH_HASHTAG_SUCCESS, result));
 	}
 });
 
@@ -34,13 +34,12 @@ router.get('/byView', async (req, res) => {
 	const getSearchQuery = `SELECT DISTINCT item_idx, title, user.nickname, thumbnail, text FROM item, user WHERE item.hashtag LIKE '%${keyword}%' AND user.user_idx = item.writer_idx ORDER BY date DESC`;
 	const getSearchResult = await db.queryParam_Parse(getSearchQuery)
 
-	const result = [];
-	result = sort.byViews(getSearchResult);
+	const result = sort.byViews(getSearchResult);
 
 	if (getSearchResult[0] == null) {
-		res.status(400).send(utils.successFalse(statusCode.NOT_FOUND, resMessage.SEARCH_TEXT_FAIL));
+		res.status(400).send(utils.successFalse(statusCode.NOT_FOUND, resMessage.SEARCH_HASHTAG_FAIL));
 	} else {
-		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SEARCH_TEXT_SUCCESS, result));
+		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SEARCH_HASHTAG_SUCCESS, result));
 	}
 });
 
@@ -50,13 +49,12 @@ router.get('/byLike', async (req, res) => {
 	const getSearchQuery = `SELECT DISTINCT item_idx, title, user.nickname, thumbnail, text FROM item, user WHERE item.hashtag LIKE '%${keyword}%' AND user.user_idx = item.writer_idx ORDER BY date DESC`;
 	const getSearchResult = await db.queryParam_Parse(getSearchQuery)
 
-	const result = [];
-	result = sort.byLikes(getSearchResult);
+	const result = sort.byLikes(getSearchResult);
 
 	if (getSearchResult[0] == null) {
-		res.status(400).send(utils.successFalse(statusCode.NOT_FOUND, resMessage.SEARCH_TEXT_FAIL));
+		res.status(400).send(utils.successFalse(statusCode.NOT_FOUND, resMessage.SEARCH_HASHTAG_FAIL));
 	} else {
-		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SEARCH_TEXT_SUCCESS, result));
+		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SEARCH_HASHTAG_SUCCESS, result));
 	}
 });
 
