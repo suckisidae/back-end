@@ -9,7 +9,7 @@ const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 const sort = require('../../module/quicksort');
 
-// 
+
 router.get('/', async (req, res) => {
 	const keyword = req.query.keyword;
 	const getSearchQuery = `SELECT DISTINCT item_idx, title, user.nickname, thumbnail, text FROM item, user WHERE item.text LIKE '%${keyword}%' AND user.user_idx = item.writer_idx ORDER BY date DESC`;

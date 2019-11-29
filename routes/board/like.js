@@ -25,7 +25,7 @@ router.get('/', authUtils.isLoggedin, async (req, res) => {
 		getLikeItemRegUserResult[i].thumbnail = getLikeResult[i].thumbnail;
 		getLikeItemRegUserResult[i].title = getLikeResult[i].title;
 	}
-	if (!getLikeResult) {
+	if (!getLikeResult[0]) {
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.GET_BAD_RESULT));
 	} else {
 		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_GET_ITEM, getLikeResult));
@@ -46,15 +46,33 @@ router.post('/:item_idx', authUtils.isLoggedin, async (req, res) => {
 	const isHeartResult = await db.queryParam_Parse(isHeartQuery, [userIdx, itemIdx]);
 
 	if (isHeartResult[0]["SUCCESS"] == 1) {
+
+		//해당 물품의 like_count를 -1 합니다.
+		const desLikeCountQuery = "UPDATE item set like_COUNT = like_count - 1 WHERE item_idx = ?";
+		const desLikeCountResult = await db.queryParam_Parse(delHeartQuery, [userIdx, itemIdx]);
+
 		//상품을 찜 해놓았을 경우 취소합니다.
 		const delHeartQuery = "Delete FROM heart WHERE user_idx = ? AND item_idx = ?"
 		const delHeartResult = await db.queryParam_Parse(delHeartQuery, [userIdx, itemIdx]);
-		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.DEL_LIKED_ITEM, delHeartResult));
+		if(delHeartResult.affectedRows === 0){
+			res.status(400).send(utils.successTrue(statusCode.BAD_REQUEST, resMessage.BAD_LIKED_ITEM));
+		}else{
+			res.status(200).send(utils.successTrue(statusCode.OK, resMessage.DEL_LIKED_ITEM, delHeartResult));
+		}
 	} else {
+
+		//해당 물품의 like_count를 +1 합니다.
+		const incLikeCountQuery = "UPDATE item set like_COUNT = like_count + 1 WHERE item_idx = ?";
+		const incLikeCountResult = await db.queryParam_Parse(delHeartQuery, [userIdx, itemIdx]);
+
 		//상품을 찜 하지 않았을 경우 등록합니다.
 		const addHeartQuery = "INSERT INTO heart (user_idx, item_idx) VALUES (?,?)"
 		const addHeartResult = await db.queryParam_Parse(addHeartQuery, [userIdx, itemIdx]);
-		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ADD_LIKED_ITEM, addHeartResult));
+		if(addHeartResult.affectedRows === 0){
+			res.status(400).send(utils.successTrue(statusCode.BAD_REQUEST, resMessage.BAD_LIKED_ITEM));
+		}else{
+			res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ADD_LIKED_ITEM, addHeartResult));
+		}
 	}
 
 });

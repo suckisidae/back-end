@@ -76,6 +76,7 @@ module.exports = {
     NO_TALK_LIST: "대화 목록 없음",
 
     NO_READ_GET_BAD_RESULT: "안읽은 메세지 개수 불러오기 실패",
+    GET_BAD_INFO: "유저 정보 불러오기 실패",
 
     READ_CHECK_UPDATE_FAIL: "메세지 읽음 업데이트 실패",
 
@@ -86,7 +87,7 @@ module.exports = {
     DEL_LIKED_ITEM:"상품 찜 삭제 성공",
     BAD_LIKED_ITEM:"상품 상호작용 실패",
 
-    GET_MY_PRODUCT_FAIL:"내 상품조회 실패",
+    GET_MY_PRODUCT_FAIL:"내 상품조회 실패(등록한 상품이 없습니다)",
     GET_MY_PRODUCT_SUCCESS: "내 상품조회 성공",
 
     ASK_ITEM_GET_BAD_RESULT:"거래 요청한 물품 조회 실패",

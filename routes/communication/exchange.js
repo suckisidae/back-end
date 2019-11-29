@@ -85,13 +85,13 @@ router.put('/', authUtils.isLoggedin, async(req, res) => {
 
 /* 거래요청 취소*/
 router.delete('/', authUtils.isLoggedin, async (req, res) => {
-    const to_item_idx = req.from.to_item_idx;
+    const to_item_idx = req.body.to_item_idx;
     const from_item_idx = req.body.from_item_idx;
 
     const deleteExchangeQuery = `DELETE FROM trade WHERE from_item_idx = ${from_item_idx} AND to_item_idx = ${to_item_idx} ORDER BY date DESC LIMIT 1`;
     const deleteExchangeResult = await db.queryParam_Parse(deleteExchangeQuery);
 
-    if (!deleteExchangeResult) {
+    if (deleteExchangeResult.affectedRows === 0) {
         res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.DELETE_EXCHANGE_FAIL));
     } else {
         res.status(200).send(utils.successTrue(statusCode.OK, resMessage.DELETE_EXCHANGE_SUCCESS, deleteExchangeResult));
