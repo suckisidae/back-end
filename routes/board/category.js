@@ -21,7 +21,6 @@ router.get('/:category_idx', async (req, res) => {
     } else {
         res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_GET_CATEGORY, getCategoryListInfoResult));
     }
-
 });
 
 
