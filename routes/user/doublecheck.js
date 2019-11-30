@@ -9,7 +9,7 @@ const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 
 // 닉네임 중복확인
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
     const nickname = req.body.nickname;
 
     //존재 유무 확인
