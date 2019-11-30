@@ -6,7 +6,7 @@ const statusCode = require('../../module/utils/statusCode');
 const db = require('../../module/pool');
 
 // 아이디 중복확인
-router.get('/', async(req, res) => {
+router.post('/', async(req, res) => {
     const id = req.body.id;
 
     const idCheckQuery = `SELECT id FROM user WHERE id = '${id}'`;
