@@ -11,9 +11,6 @@ const encryption = require('../../module/encryption')
 
 router.post('/', async (req, res) => {
 	const {id, password} = req.body;
-	
-	console.log(id);
-	console.log(password);
 
 	if (!id || !password){
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
@@ -21,7 +18,12 @@ router.post('/', async (req, res) => {
 	}
 	const getUserPasswordQuery = `SELECT user_idx, password, nickname, salt FROM user WHERE id = '${id}'`
 	const getUserPasswordResult = await db.queryParam_None(getUserPasswordQuery)
-	console.log(getUserPasswordResult[0].nickname)
+
+	//아이디가 없을 때
+	if(!getUserPasswordResult.length){
+		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.LOGIN_FAIL));
+		return;
+	}
 	if(!getUserPasswordResult){
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NOT_FIND_USER));
 		return;
