@@ -5,8 +5,6 @@ const resMessage = require('../../module/utils/responseMessage');
 const statusCode = require('../../module/utils/statusCode');
 const db = require('../../module/pool');
 const authUtils = require('../../module/utils/authUtils');
-const upload = require('../../config/multer');
-const jwt = require('../../module/jwt');
 
 // 거래 요청받은 상품 조회
 // 대기:0 수락:1
