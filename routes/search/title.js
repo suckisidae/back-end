@@ -4,15 +4,12 @@ const utils = require('../../module/utils/utils');
 const resMessage = require('../../module/utils/responseMessage');
 const statusCode = require('../../module/utils/statusCode');
 const db = require('../../module/pool');
-const authUtils = require('../../module/utils/authUtils');
-const upload = require('../../config/multer');
-const jwt = require('../../module/jwt');
 const sort = require('../../module/quicksort');
 
 // 최신순 조회
 router.get('/byDate', async (req, res) => {
 	const keyword = req.query.keyword;
-	const getSearchQuery = `SELECT DISTINCT item_idx, title, user.nickname, thumbnail, text FROM item, user WHERE item.title LIKE '%${keyword}%' AND user.user_idx = item.writer_idx ORDER BY date DESC`;
+	const getSearchQuery = `SELECT DISTINCT item_idx, title, user.nickname, thumbnail, text, views, like_count FROM item, user WHERE item.title LIKE '%${keyword}%' AND user.user_idx = item.writer_idx ORDER BY date DESC`;
 	const getSearchResult = await db.queryParam_Parse(getSearchQuery)
 
 	let result = [];
@@ -31,7 +28,7 @@ router.get('/byDate', async (req, res) => {
 // 조회순 조회
 router.get('/byView', async (req, res) => {
 	const keyword = req.query.keyword;
-	const getSearchQuery = `SELECT DISTINCT item_idx, title, user.nickname, thumbnail, text FROM item, user WHERE item.title LIKE '%${keyword}%' AND user.user_idx = item.writer_idx ORDER BY date DESC`;
+	const getSearchQuery = `SELECT DISTINCT item_idx, title, user.nickname, thumbnail, text, views, like_count FROM item, user WHERE item.title LIKE '%${keyword}%' AND user.user_idx = item.writer_idx ORDER BY date DESC`;
 	const getSearchResult = await db.queryParam_Parse(getSearchQuery)
 
 	const result = sort.byViews(getSearchResult);
@@ -46,7 +43,7 @@ router.get('/byView', async (req, res) => {
 // 좋아요순 조회
 router.get('/byLike', async (req, res) => {
 	const keyword = req.query.keyword;
-	const getSearchQuery = `SELECT DISTINCT item_idx, title, user.nickname, thumbnail, text FROM item, user WHERE item.title LIKE '%${keyword}%' AND user.user_idx = item.writer_idx ORDER BY date DESC`;
+	const getSearchQuery = `SELECT DISTINCT item_idx, title, user.nickname, thumbnail, text, views, like_count FROM item, user WHERE item.title LIKE '%${keyword}%' AND user.user_idx = item.writer_idx ORDER BY date DESC`;
 	const getSearchResult = await db.queryParam_Parse(getSearchQuery)
 
 	const result = sort.byLikes(getSearchResult);

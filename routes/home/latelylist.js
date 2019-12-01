@@ -4,9 +4,6 @@ const utils = require('../../module/utils/utils');
 const resMessage = require('../../module/utils/responseMessage');
 const statusCode = require('../../module/utils/statusCode');
 const db = require('../../module/pool');
-const authUtils = require('../../module/utils/authUtils');
-const upload = require('../../config/multer');
-const jwt = require('../../module/jwt');
 
 // 홈화면에서 보이는 카테고리별 최근 6개의 물품들
 router.get('/', async(req, res)=>{

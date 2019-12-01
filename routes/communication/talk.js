@@ -5,8 +5,6 @@ const resMessage = require('../../module/utils/responseMessage');
 const statusCode = require('../../module/utils/statusCode');
 const db = require('../../module/pool');
 const authUtils = require('../../module/utils/authUtils');
-const upload = require('../../config/multer');
-const jwt = require('../../module/jwt');
 const moment = require('moment');
 
 router.get('/:to_user_idx', authUtils.isLoggedin, async(req, res)=>{ //대화 상대를 받아온다
