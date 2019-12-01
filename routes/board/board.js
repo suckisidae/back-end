@@ -43,11 +43,12 @@ router.get('/:item_idx', authUtils.isLoggedin, async(req, res)=>{
 });
 
 //게시물 등록하기
-router.post('/', authUtils.isLoggedin, async(req, res) =>{
+router.post('/',  upload.single('thumbnail'), authUtils.isLoggedin, async(req, res) =>{
 
     const writer_idx = req.decoded.idx;
     const date = moment().format("YYYY-MM-DD HH:mm:ss");
-    const {thumbnail,hashtag, text, category_idx, title} = req.body;
+    const {hashtag, text, category_idx, title} = req.body;
+    const thumbnail = req.file.location;
 
     const insertItemQuery = "INSERT INTO item (writer_idx, date , thumbnail, hashtag, text, category_idx, title) VALUES (?,?,?,?,?,?,?)";
     const insertItemResult = await db.queryParam_Parse(insertItemQuery, [writer_idx, date , thumbnail, hashtag, text, category_idx, title]);
