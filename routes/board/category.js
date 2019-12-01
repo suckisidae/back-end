@@ -7,13 +7,14 @@ const db = require('../../module/pool');
 const authUtils = require('../../module/utils/authUtils');
 const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
+const sort = require('../../module/quicksort');
 
 // 카테고리 리스트 불러오기
-router.get('/:category_idx', async (req, res) => {
+router.get('/byDate/:category_idx', async (req, res) => {
 
     const itemList = req.params.category_idx;
 
-    const getCategoryListInfoQuery = "SELECT thumbnail, title FROM item WHERE category_idx = ? ORDER BY views ASC";
+    const getCategoryListInfoQuery = "SELECT item_idx, thumbnail, title, views, like_count FROM item WHERE category_idx = ? ORDER BY views ASC";
     const getCategoryListInfoResult = await db.queryParam_Parse(getCategoryListInfoQuery, [itemList]);
 
     if (!getCategoryListInfoResult[0]) {
