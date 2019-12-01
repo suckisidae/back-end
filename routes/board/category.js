@@ -14,7 +14,7 @@ router.get('/byDate/:category_idx', async (req, res) => {
 
     const itemList = req.params.category_idx;
 
-    const getCategoryListInfoQuery = "SELECT item_idx, thumbnail, title, views, like_count FROM item WHERE category_idx = ? ORDER BY views ASC";
+    const getCategoryListInfoQuery = "SELECT item_idx, thumbnail, title, date, views, like_count FROM item WHERE category_idx = ? ORDER BY date DESC";
     const getCategoryListInfoResult = await db.queryParam_Parse(getCategoryListInfoQuery, [itemList]);
 
     let result = [];
@@ -35,7 +35,7 @@ router.get('/byView/:category_idx', async (req, res) => {
 
     const itemList = req.params.category_idx;
 
-    const getCategoryListInfoQuery = "SELECT item_idx, thumbnail, title, views, like_count FROM item WHERE category_idx = ? ORDER BY views ASC";
+    const getCategoryListInfoQuery = "SELECT item_idx, thumbnail, title, date, views, like_count FROM item WHERE category_idx = ? ORDER BY date DESC";
     const getCategoryListInfoResult = await db.queryParam_Parse(getCategoryListInfoQuery, [itemList]);
 
     let result = sort.byViews(getCategoryListInfoResult);
@@ -43,7 +43,7 @@ router.get('/byView/:category_idx', async (req, res) => {
     if (!getCategoryListInfoResult[0]) {
         res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.GET_BAD_CATEGORY));
     } else {
-        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_GET_CATEGORY, getCategoryListInfoResult));
+        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_GET_CATEGORY, result));
     }
 });
 
@@ -52,7 +52,7 @@ router.get('/byLike/:category_idx', async (req, res) => {
 
     const itemList = req.params.category_idx;
 
-    const getCategoryListInfoQuery = "SELECT item_idx, thumbnail, title, views, like_count FROM item WHERE category_idx = ? ORDER BY views ASC";
+    const getCategoryListInfoQuery = "SELECT item_idx, thumbnail, title, date, views, like_count FROM item WHERE category_idx = ? ORDER BY date DESC";
     const getCategoryListInfoResult = await db.queryParam_Parse(getCategoryListInfoQuery, [itemList]);
 
     let result = sort.byLikes(getCategoryListInfoResult);
@@ -60,7 +60,7 @@ router.get('/byLike/:category_idx', async (req, res) => {
     if (!getCategoryListInfoResult[0]) {
         res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.GET_BAD_CATEGORY));
     } else {
-        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_GET_CATEGORY, getCategoryListInfoResult));
+        res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SUCCESS_GET_CATEGORY, result));
     }
 });
 
