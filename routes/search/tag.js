@@ -9,7 +9,6 @@ const upload = require('../../config/multer');
 const jwt = require('../../module/jwt');
 const sort = require('../../module/quicksort');
 
-
 // 최신순 조회
 router.get('/byDate', async (req, res) => {
 	const keyword = req.query.keyword;

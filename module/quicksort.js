@@ -12,14 +12,14 @@ module.exports = {
             right = [];
 
         for (var i = 1; i < len; ++i) {
-            if (arr[i].views < middle.views) {
+            if (arr[i].views > middle.views) {
                 left.push(arr[i]);
             } else {
                 right.push(arr[i]);
             }
         }
 
-        return QuickSort(left).concat(middle, QuickSort(right));
+        return module.exports.byViews(left).concat(middle, module.exports.byViews(right));
     },
     byLikes: (arr) => {
         // 좋아요를 기준으로 sort
@@ -34,13 +34,13 @@ module.exports = {
             right = [];
 
         for (var i = 1; i < len; ++i) {
-            if (arr[i].like_count < middle.like_count) {
+            if (arr[i].like_count > middle.like_count) {
                 left.push(arr[i]);
             } else {
                 right.push(arr[i]);
             }
         }
 
-        return QuickSort(left).concat(middle, QuickSort(right));
+        return module.exports.byLikes(left).concat(middle, module.exports.byLikes(right));
     }
 }

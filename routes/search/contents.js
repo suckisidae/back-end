@@ -57,4 +57,5 @@ router.get('/byLike', async (req, res) => {
 		res.status(200).send(utils.successTrue(statusCode.OK, resMessage.SEARCH_TEXT_SUCCESS, result));
 	}
 });
+
 module.exports = router;

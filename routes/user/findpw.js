@@ -11,7 +11,7 @@ const moment = require('moment');
 const encryption = require('../../module/encryption');
 
 //비밀번호 찾기
-router.get('/', async(req, res)=>{
+router.post('/', async(req, res)=>{
 	//유저idx, 질문idx, 대답
 	const {user_id, pw_ask, pw_answer} = req.body;
 
