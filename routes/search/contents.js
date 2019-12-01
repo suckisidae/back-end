@@ -15,7 +15,7 @@ router.get('/byDate', async (req, res) => {
 	const getSearchQuery = `SELECT DISTINCT item_idx, title, user.nickname, thumbnail, text, views, like_count FROM item, user WHERE item.text LIKE '%${keyword}%' AND user.user_idx = item.writer_idx ORDER BY date DESC`;
 	const getSearchResult = await db.queryParam_Parse(getSearchQuery)
 
-	const result = [];
+	let result = [];
 
 	for(i in getSearchResult) {
 		result[i] = getSearchResult[i];
@@ -34,8 +34,7 @@ router.get('/byView', async (req, res) => {
 	const getSearchQuery = `SELECT DISTINCT item_idx, title, user.nickname, thumbnail, text, views, like_count FROM item, user WHERE item.text LIKE '%${keyword}%' AND user.user_idx = item.writer_idx ORDER BY date DESC`;
 	const getSearchResult = await db.queryParam_Parse(getSearchQuery)
 
-	const result = [];
-	result = sort.byViews(getSearchResult);
+	const result = sort.byViews(getSearchResult);
 
 	if (getSearchResult[0] == null) {
 		res.status(400).send(utils.successFalse(statusCode.NOT_FOUND, resMessage.SEARCH_TEXT_FAIL));
@@ -50,8 +49,7 @@ router.get('/byLike', async (req, res) => {
 	const getSearchQuery = `SELECT DISTINCT item_idx, title, user.nickname, thumbnail, text, views, like_count FROM item, user WHERE item.text LIKE '%${keyword}%' AND user.user_idx = item.writer_idx ORDER BY date DESC`;
 	const getSearchResult = await db.queryParam_Parse(getSearchQuery)
 
-	const result = [];
-	result = sort.byLikes(getSearchResult);
+	const result = sort.byLikes(getSearchResult);
 
 	if (getSearchResult[0] == null) {
 		res.status(400).send(utils.successFalse(statusCode.NOT_FOUND, resMessage.SEARCH_TEXT_FAIL));
