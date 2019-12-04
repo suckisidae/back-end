@@ -24,7 +24,9 @@ router.get('/:item_idx', authUtils.isLoggedin, async(req, res)=>{
         res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ITEM_GET_BAD_RESULT));
         return;
     }
-
+    const getUserNickQuery = 'SELECT nickname FROM user WHERE user_idx = (SELECT writer_idx FROM item WHERE item_idx = ?)';
+    const getUserNickResult = await db.queryParam_Parse(getUserNickQuery,[itemIdx]);
+    //console.log(getUserNickResult[0]);
     if(!getAllItemInfoResult){
         res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.ITEM_GET_BAD_RESULT));
     }else{
@@ -37,6 +39,7 @@ router.get('/:item_idx', authUtils.isLoggedin, async(req, res)=>{
         const addVisitedQuery = "INSERT INTO visited (user_idx, item_idx) VALUES (?,?)";
         const addVisitedResult = await db.queryParam_Parse(addVisitedQuery, [userIdx, itemIdx]);
 
+        getAllItemInfoResult[0].nickname = getUserNickResult[0].nickname;
         res.status(200).send(utils.successTrue(statusCode.OK, resMessage.ITEM_GET_SUCCESS, getAllItemInfoResult));
     }
 });
