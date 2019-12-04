@@ -1,10 +1,10 @@
 module.exports = {
     byViews: (arr) => {
         // 조회수를 기준으로 sort
-
+        // 알고리즘 출처 https://boycoding.tistory.com/74
         if (arr.length == 0) {
             return [];
-        }
+        }ㅗㅓㅕ
 
         var middle = arr[0];
         var len = arr.length;
