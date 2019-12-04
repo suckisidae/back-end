@@ -11,10 +11,10 @@ const moment = require('moment');
 router.post('/:item_idx', authUtils.isLoggedin, async(req,res)=>{
 
 	const date = moment().format("YYYY-MM-DD HH:mm:ss");
-	const text = req.body;
+	const text = req.body.text;
 	const item_idx = req.params.item_idx;
 	const writer_idx = req.decoded.idx;
-	
+	console.log(text);
 	if(!writer_idx | !text){
 		res.status(200).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.NULL_VALUE));
         return;
@@ -39,7 +39,7 @@ router.post('/:item_idx', authUtils.isLoggedin, async(req,res)=>{
 router.get('/:item_idx', async(req, res)=>{
     const itemIdx = req.params.item_idx;
 	
-	const getAllCommentQuery = "SELECT * FROM comment WHERE item_idx = ?";
+	const getAllCommentQuery = "SELECT comment_idx, text, date, user.nickname, user.photo FROM user, comment WHERE item_idx = ? AND writer_idx = user_idx";
 	const getAllCommentResult = await db.queryParam_Parse(getAllCommentQuery, [itemIdx]);
 
 	if(getAllCommentResult[0] == undefined){

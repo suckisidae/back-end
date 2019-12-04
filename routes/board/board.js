@@ -60,12 +60,13 @@ router.post('/',  upload.single('thumbnail'), authUtils.isLoggedin, async(req, r
 });
 
 //게시물 수정하기
-router.put('/:item_idx', authUtils.isLoggedin, async(req, res) =>{
+router.put('/:item_idx', upload.single('thumbnail'), authUtils.isLoggedin, async(req, res) =>{
 
     const itemIdx = req.params.item_idx;
     const writer_idx = req.decoded.idx;
     const date = moment().format("YYYY-MM-DD HH:mm:ss");
-    const {thumbnail,hashtag, text, category_idx, title} = req.body;
+    const thumbnail = req.file.location;
+    const {hashtag, text, category_idx, title} = req.body;
 
     const itemUpdateQuery = "UPDATE item SET date = ?, thumbnail = ?, hashtag = ?, text = ?, category_idx = ?, title = ? WHERE item_idx = ?"    
     const itemUpdateResult = await db.queryParam_Parse(itemUpdateQuery, [date , thumbnail, hashtag, text, category_idx, title, itemIdx]);

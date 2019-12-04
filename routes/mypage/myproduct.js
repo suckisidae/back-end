@@ -10,7 +10,7 @@ const authUtils = require('../../module/utils/authUtils');
 router.get('/', authUtils.isLoggedin, async(req, res) => {
     const userIdx = req.decoded.idx;
     
-    const getMyProductQuery = `SELECT thumbnail, title, date FROM item WHERE writer_idx = '${userIdx}' ORDER BY date DESC`;
+    const getMyProductQuery = `SELECT item_idx, thumbnail, title, date FROM item WHERE writer_idx = '${userIdx}' ORDER BY date DESC`;
     const getMyProductResult = await db.queryParam_Parse(getMyProductQuery);
 
     if(!getMyProductResult[0]){
