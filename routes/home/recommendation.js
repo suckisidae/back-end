@@ -39,7 +39,7 @@ router.get('/', authUtils.isLoggedin, async(req, res)=>{
         const favoriteCategoryIndex = Category.indexOf(maxCategory);
 
         //내가 선호하는 카테고리에서 내가 봤던 물품들을 제외하고 3개 가져옴 (차집합)
-        const getRecommendItemQuery = "SELECT thumbnail, title FROM item WHERE NOT EXISTS (SELECT 1 FROM visited WHERE visited.item_idx = item.item_idx AND user_idx = ?) AND category_idx = ? ORDER BY item.views DESC LIMIT 3"
+        const getRecommendItemQuery = "SELECT thumbnail, title, item_idx FROM item WHERE NOT EXISTS (SELECT 1 FROM visited WHERE visited.item_idx = item.item_idx AND user_idx = ?) AND category_idx = ? ORDER BY item.views DESC LIMIT 3"
         const getRecommendItemResult = await db.queryParam_Parse(getRecommendItemQuery, [userIdx, favoriteCategoryIndex]);
         
         console.log(getRecommendItemResult)
