@@ -46,8 +46,8 @@ router.post('/:item_idx', authUtils.isLoggedin, async (req, res) => {
 	if (isHeartResult[0]["SUCCESS"] == 1) {
 
 		//해당 물품의 like_count를 -1 합니다.
-		const desLikeCountQuery = "UPDATE item set like_COUNT = like_count - 1 WHERE item_idx = ?";
-		const desLikeCountResult = await db.queryParam_Parse(desLikeCountQuery, [userIdx, itemIdx]);
+		const desLikeCountQuery = "UPDATE item set like_count = (like_count - 1) WHERE item_idx = ?";
+		const desLikeCountResult = await db.queryParam_Parse(desLikeCountQuery, [itemIdx]);
 
 		//상품을 찜 해놓았을 경우 취소합니다.
 		const delHeartQuery = "Delete FROM heart WHERE user_idx = ? AND item_idx = ?"
@@ -60,8 +60,8 @@ router.post('/:item_idx', authUtils.isLoggedin, async (req, res) => {
 	} else {
 
 		//해당 물품의 like_count를 +1 합니다.
-		const incLikeCountQuery = "UPDATE item set like_COUNT = like_count + 1 WHERE item_idx = ?";
-		const incLikeCountResult = await db.queryParam_Parse(incLikeCountQuery, [userIdx, itemIdx]);
+		const incLikeCountQuery = "UPDATE item set like_count = (like_count + 1) WHERE item_idx = ?";
+		const incLikeCountResult = await db.queryParam_Parse(incLikeCountQuery, [itemIdx]);
 
 		//상품을 찜 하지 않았을 경우 등록합니다.
 		const addHeartQuery = "INSERT INTO heart (user_idx, item_idx) VALUES (?,?)"
