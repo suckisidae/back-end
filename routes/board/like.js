@@ -11,7 +11,7 @@ router.get('/', authUtils.isLoggedin, async (req, res) => {
 	const userIdx = req.decoded.idx;
 
 	// 찜 상품의 이름과 썸네일을 가져옵니다.
-	const getLikeQuery = `SELECT thumbnail, title FROM item WHERE item_idx IN (SELECT item_idx FROM heart WHERE user_idx = ${userIdx}) ORDER BY writer_idx `;
+	const getLikeQuery = `SELECT thumbnail, title, item_idx FROM item WHERE item_idx IN (SELECT item_idx FROM heart WHERE user_idx = ${userIdx}) ORDER BY writer_idx `;
 	const getLikeResult = await db.queryParam_Parse(getLikeQuery);
 
 	// 찜 상품의 닉네임과 아이디를 가져옵니다.
@@ -22,6 +22,7 @@ router.get('/', authUtils.isLoggedin, async (req, res) => {
 	for (i in getLikeItemRegUserResult) {
 		getLikeItemRegUserResult[i].thumbnail = getLikeResult[i].thumbnail;
 		getLikeItemRegUserResult[i].title = getLikeResult[i].title;
+		getLikeItemRegUserResult[i].item_idx = getLikeResult[i].item_idx;
 	}
 	if (!getLikeResult[0]) {
 		res.status(400).send(utils.successFalse(statusCode.BAD_REQUEST, resMessage.GET_BAD_RESULT));
