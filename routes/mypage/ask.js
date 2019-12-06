@@ -74,6 +74,7 @@ router.get('/', authUtils.isLoggedin, async(req, res)=>{
 		for(let k = 0; k < getMyItemResult.length; k++){
 			buf[i].ask_item_thumbnail = getMyItemResult[k].thumbnail;
 			buf[i].ask_item_title = getMyItemResult[k].title;
+			buf[i].ask_item_idx = getMyTradeResult[i].from_item_idx;
 		}
 	}
 	
